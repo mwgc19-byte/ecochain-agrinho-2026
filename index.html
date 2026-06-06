@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EcoChain: conectando alimentos, transformando vidas.">
+  <title>EcoChain | Agrinho 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="#" aria-label="EcoChain - página inicial">
+      <svg class="marca-simbolo" viewBox="0 0 136 88" aria-hidden="true">
+        <defs>
+          <linearGradient id="eloVerde" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#a7de38" />
+            <stop offset="1" stop-color="#59a91f" />
+          </linearGradient>
+          <linearGradient id="folhaVerde" x1="0" x2="1" y1="1" y2="0">
+            <stop offset="0" stop-color="#54aa1e" />
+            <stop offset="1" stop-color="#a9df3b" />
+          </linearGradient>
+        </defs>
+        <g class="corrente-marca">
+          <path class="elo elo-esquerdo" d="M67 39 54 26a17 17 0 0 0-24 0L14 42a17 17 0 0 0 24 24l17-17" />
+          <path class="elo elo-direito" d="m56 50 13 13a17 17 0 0 0 24 0l16-16a17 17 0 0 0-24-24L68 40" />
+          <path class="ponte-elo" d="m45 59 25-25" />
+        </g>
+        <g class="folha-marca">
+          <path class="folha-corpo" d="M55 51C41 27 47 8 76 1c2 28-6 44-21 50Z" />
+          <path class="folha-nervura" d="M54 54C59 32 66 16 75 5M57 42l-11-8M61 32l-10-7M66 22l-9-5M58 43l13-11M62 33l12-11M67 22l8-8" />
+        </g>
+      </svg>
+
+      <span class="marca-divisor" aria-hidden="true"></span>
+
+      <span class="marca-texto">
+        <strong><span>Eco</span>Chain</strong>
+        <small>Conectando alimentos, transformando vidas.</small>
+      </span>
+    </a>
+
+    <p class="slogan-topo">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 14c1-7 6-9 14-9-1 8-5 13-12 13" />
+        <path d="M5 20c2-6 6-9 11-12" />
+      </svg>
+      Juntos contra o desperdício
+    </p>
+  </header>
+
+  <main class="conteudo">
+    <nav class="menu-abas" aria-label="Navegação principal">
+      <a class="aba ativa" href="#inicio" data-aba="inicio" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m3 11 9-8 9 8" />
+          <path d="M5 10v10h14V10M9 20v-6h6v6" />
+        </svg>
+        <span>Início</span>
+      </a>
+
+      <a class="aba" href="#doadores" data-aba="doadores">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="9" cy="8" r="3" />
+          <path d="M3 20c0-3 2.3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M16 15c3 0 5 1.8 5 4.5" />
+        </svg>
+        <span>Doadores</span>
+      </a>
+
+      <a class="aba" href="#destinos" data-aba="destinos">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 21s7-5.1 7-12a7 7 0 1 0-14 0c0 6.9 7 12 7 12Z" />
+          <circle cx="12" cy="9" r="2.3" />
+        </svg>
+        <span>Pontos de Destino</span>
+      </a>
+
+      <a class="aba aba-doacao" href="#doacao" data-aba="doacao">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <g class="folha-doacao">
+            <path d="M12.2 9.2C12.3 5 14.6 2.8 19 2.5c-.2 4.2-2.4 6.5-6.5 6.8" />
+            <path d="M11.7 10c1.4-2.6 3.3-4.4 5.7-5.5" />
+          </g>
+          <path class="mao-doacao" d="M3 15.2h3.2l2.2-2.1c.6-.6 1.3-.9 2.1-.9h3.3c.8 0 1.4.6 1.4 1.4s-.6 1.4-1.4 1.4h-2.3" />
+          <path class="mao-doacao" d="m14.5 14.3 3.9-2c.8-.4 1.7-.1 2.1.6.4.7.2 1.6-.5 2.1l-5.5 3.6c-.7.5-1.5.7-2.3.7H6.1L3 18.1" />
+          <path class="brilho-doacao" d="M8 6.7v2M7 7.7h2" />
+        </svg>
+        <span>Doação</span>
+      </a>
+
+      <a class="aba" href="#relatorio" data-aba="relatorio">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 20V10h4v10M10 20V4h4v16M16 20V7h4v13M2 20h20" />
+        </svg>
+        <span>Relatório</span>
+      </a>
+    </nav>
+
+    <!-- =========================
+    INÍCIO DA ABA: INÍCIO
+    Reúne o conteúdo institucional apresentado ao acessar o site:
+    carrossel, indicadores de impacto e espaço para futuras informações.
+    ========================== -->
+    <section class="secao-aba secao-aba-ativa" id="section-inicio" data-secao="inicio">
+    <section class="carrossel" aria-label="Destaques EcoChain">
+      <article class="slide ativo" style="--imagem: url('assets/images/hero-planeta.png')">
+        <div class="slide-conteudo">
+          <h1><span>Eco</span>Chain</h1>
+          <p>Redistribuição inteligente de alimentos próximos do vencimento para reduzir desperdício, apoiar famílias e proteger o meio ambiente.</p>
+          <div class="acoes">
+            <a class="botao botao-principal" href="#saiba-mais" data-abrir-modal>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 14c1-7 6-9 14-9-1 8-5 13-12 13" /><path d="M5 20c2-6 6-9 11-12" /></svg>
+              Saiba mais
+            </a>
+            <a class="botao botao-secundario" href="#como-funciona">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="m10 8 6 4-6 4Z" /></svg>
+              Como funciona
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" style="--imagem: url('assets/images/hero-alimentos.png')">
+        <div class="slide-conteudo">
+          <p class="slide-etiqueta">Alimentos que encontram destinos</p>
+          <h2>Doe hoje.<br><span>Transforme amanhã.</span></h2>
+          <p>Cadastre alimentos disponíveis e ajude a criar uma corrente de cuidado que chega a quem mais precisa.</p>
+          <div class="acoes">
+            <a class="botao botao-principal" href="#doacao">Fazer doação</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" style="--imagem: url('assets/images/hero-comunidade.png')">
+        <div class="slide-conteudo">
+          <p class="slide-etiqueta">Uma rede que gera impacto</p>
+          <h2>Conexões que<br><span>alimentam vidas.</span></h2>
+          <p>Acompanhe os resultados das doações e descubra como pequenas ações fortalecem toda a comunidade.</p>
+          <div class="acoes">
+            <a class="botao botao-principal" href="#relatorio">Ver relatório</a>
+          </div>
+        </div>
+      </article>
+
+      <button class="controle controle-anterior" type="button" aria-label="Slide anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+      </button>
+      <button class="controle controle-proximo" type="button" aria-label="Próximo slide">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+      </button>
+
+      <div class="indicadores" aria-label="Selecionar destaque">
+        <button class="indicador ativo" type="button" aria-label="Exibir slide 1" aria-current="true"></button>
+        <button class="indicador" type="button" aria-label="Exibir slide 2"></button>
+        <button class="indicador" type="button" aria-label="Exibir slide 3"></button>
+      </div>
+    </section>
+
+    <!-- Painel público com os principais resultados da iniciativa. -->
+    <section class="impacto-home" id="impacto" aria-labelledby="titulo-impacto">
+      <div class="cabecalho-secao">
+        <div>
+          <p class="secao-etiqueta">Impacto em tempo real</p>
+          <h2 id="titulo-impacto">Resultados que alimentam mudanças</h2>
+        </div>
+        <p>Indicadores atualizados conforme novas doações avançam pela nossa rede de redistribuição.</p>
+      </div>
+
+      <div class="grade-indicadores">
+        <article class="card-indicador card-indicador-destaque">
+          <span class="icone-indicador">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 7h12M5 7l1 13h12l1-13M9 7V4h6v3M9 11v5M12 11v5M15 11v5" />
+            </svg>
+          </span>
+          <div>
+            <strong><span data-metrica="alimentosSalvos">0</span> <small>kg</small></strong>
+            <h3>Alimentos salvos</h3>
+            <p>Produtos redirecionados antes do vencimento.</p>
+          </div>
+        </article>
+
+        <article class="card-indicador">
+          <span class="icone-indicador">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z" />
+            </svg>
+          </span>
+          <div>
+            <strong data-metrica="pessoasAlcancadas">0</strong>
+            <h3>Pessoas alcançadas</h3>
+            <p>Capacidade total de atendimento dos pontos de destino cadastrados na rede EcoChain.</p>
+          </div>
+        </article>
+
+        <article class="card-indicador">
+          <span class="icone-indicador">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="9" cy="8" r="3" />
+              <path d="M3 20c0-3 2.3-5 6-5s6 2 6 5M16 11a3 3 0 1 0 0-6M16 15c3 0 5 1.8 5 4.5" />
+            </svg>
+          </span>
+          <div>
+            <strong data-metrica="doadoresCadastrados">0</strong>
+            <h3>Doadores cadastrados</h3>
+            <p>Pessoas e empresas conectadas à iniciativa.</p>
+          </div>
+        </article>
+
+        <article class="card-indicador">
+          <span class="icone-indicador">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21s7-5.1 7-12a7 7 0 1 0-14 0c0 6.9 7 12 7 12Z" />
+              <circle cx="12" cy="9" r="2.3" />
+            </svg>
+          </span>
+          <div>
+            <strong data-metrica="pontosDestino">0</strong>
+            <h3>Pontos de destino</h3>
+            <p>Locais preparados para receber alimentos.</p>
+          </div>
+        </article>
+
+        <article class="card-indicador">
+          <span class="icone-indicador">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 13c1-7 6-9 14-9-1 8-5 13-12 13" />
+              <path d="M5 20c2-6 6-9 11-12" />
+            </svg>
+          </span>
+          <div>
+            <strong data-metrica="doacoesProcessadas">0</strong>
+            <h3>Doações processadas</h3>
+            <p>Entregas realizadas com destino responsável.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="faixa-indicadores">
+        <div>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 4.5 3.3 7.7 8 9 4.7-1.3 8-4.5 8-9V7Z" /><path d="m9 12 2 2 4-4" /></svg>
+          <span><strong data-metrica="itensAtencao">0</strong> itens em atenção por validade expirada</span>
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" /><path d="M12 7v5l3 2" /></svg>
+          <span>Última atualização: <strong data-metrica="ultimaAtualizacao">agora</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="espaco-projeto" aria-label="Espaço reservado para próximos conteúdos">
+      <div>
+        <p class="secao-etiqueta">Próximos passos</p>
+        <h2>Uma plataforma em evolução</h2>
+        <p>Este espaço está preparado para receber histórias de impacto, parceiros e novas ferramentas conforme o EcoChain crescer.</p>
+      </div>
+    </section>
+    </section>
+    <!-- FIM DA ABA: INÍCIO -->
+
+    <!-- =========================
+    INÍCIO DA ABA: DOADORES
+    Permite cadastrar organizações ou pessoas que disponibilizam alimentos.
+    Um único doador pode ser marcado como ativo para ser usado nas doações.
+    ========================== -->
+    <section class="secao-aba" id="section-doadores" data-secao="doadores" hidden>
+      <header class="cabecalho-pagina">
+        <p class="secao-etiqueta">Rede de parceiros</p>
+        <h1>Cadastro de doadores</h1>
+        <p>Registre mercados, produtores e outros parceiros. Antes de cadastrar alimentos, selecione qual doador está realizando a entrega.</p>
+      </header>
+
+      <!-- Formulário responsável por cadastrar um doador por vez. -->
+      <section class="painel painel-formulario" aria-labelledby="titulo-formulario-doador">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Novo parceiro</p>
+            <h2 id="titulo-formulario-doador">Dados do doador</h2>
+          </div>
+          <span>Todos os campos são obrigatórios</span>
+        </div>
+
+        <form class="formulario-cadastro formulario-doador" id="form-doador">
+          <label>
+            <span>Nome da instituição</span>
+            <input id="nome-doador" name="nomeDoador" type="text" placeholder="Ex.: Mercado Central" required>
+          </label>
+          <label>
+            <span>Tipo do doador</span>
+            <select id="tipo-doador" name="tipoDoador" required>
+              <option value="">Selecione o tipo</option>
+              <option>Mercado</option>
+              <option>Supermercado</option>
+              <option>Açougue</option>
+              <option>Padaria</option>
+              <option>Restaurante</option>
+              <option>Lanchonete</option>
+              <option>Produtor rural</option>
+              <option>Feirante</option>
+              <option>Particular</option>
+              <option>Escola</option>
+              <option>Igreja</option>
+              <option>Empresa</option>
+              <option>Cooperativa</option>
+              <option>Associação</option>
+              <option>Outro</option>
+            </select>
+          </label>
+          <!-- Campo complementar exibido apenas quando a opção Outro for escolhida. -->
+          <label class="campo-condicional" data-campo-outro-doador hidden>
+            <span>Informe o tipo do doador</span>
+            <input id="outro-tipo-doador" name="outroTipoDoador" type="text" placeholder="Ex.: Feira livre">
+          </label>
+          <label>
+            <span>Nome do responsável</span>
+            <input id="nome-responsavel" name="nomeResponsavel" type="text" placeholder="Ex.: Ana" required>
+          </label>
+          <label>
+            <span>Sobrenome do responsável</span>
+            <input id="sobrenome-responsavel" name="sobrenomeResponsavel" type="text" placeholder="Ex.: Souza" required>
+          </label>
+          <label>
+            <span>Contato telefônico</span>
+            <input id="telefone-doador" name="telefoneDoador" type="tel" inputmode="numeric" maxlength="16" placeholder="(43) 9 9999-9999" required>
+          </label>
+          <label>
+            <span>E-mail</span>
+            <input id="email-doador" name="emailDoador" type="email" placeholder="Ex.: contato@mercado.com" required>
+          </label>
+          <label>
+            <span>Cidade</span>
+            <input id="cidade-doador" name="cidadeDoador" type="text" placeholder="Ex.: Londrina" required>
+          </label>
+          <label>
+            <span>Bairro/Vila</span>
+            <input id="bairro-doador" name="bairroDoador" type="text" placeholder="Ex.: Centro" required>
+          </label>
+          <button class="botao-formulario" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            Cadastrar doador
+          </button>
+        </form>
+      </section>
+
+      <!-- Lista que exibe os parceiros e permite definir o doador ativo. -->
+      <section class="painel" aria-labelledby="titulo-lista-doadores">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Parceiros cadastrados</p>
+            <h2 id="titulo-lista-doadores">Selecione o doador ativo</h2>
+          </div>
+          <span><strong data-total-doadores>0</strong> doadores cadastrados</span>
+        </div>
+        <div class="grade-cadastros" data-lista-doadores>
+          <div class="estado-vazio">
+            <h3>Nenhum doador cadastrado</h3>
+            <p>Cadastre o primeiro parceiro para começar a registrar alimentos.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+    <!-- FIM DA ABA: DOADORES -->
+
+    <!-- =========================
+    INÍCIO DA ABA: PONTOS DE DESTINO
+    Armazena os locais que podem receber alimentos.
+    Esses dados são usados pelo algoritmo de redistribuição.
+    ========================== -->
+    <section class="secao-aba" id="section-destinos" data-secao="destinos" hidden>
+      <header class="cabecalho-pagina">
+        <p class="secao-etiqueta">Rede de atendimento</p>
+        <h1>Pontos de Destino</h1>
+        <p>Cadastre os locais que recebem alimentos. O EcoChain considera prioridade, perecibilidade, tipo e capacidade de atendimento para sugerir destinos coerentes.</p>
+      </header>
+
+      <!-- Formulário responsável por cadastrar os locais de recebimento. -->
+      <section class="painel painel-formulario" aria-labelledby="titulo-formulario-destino">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Novo ponto</p>
+            <h2 id="titulo-formulario-destino">Dados do ponto de destino</h2>
+          </div>
+          <span>Todos os campos são obrigatórios</span>
+        </div>
+
+        <form class="formulario-cadastro formulario-destino" id="form-destino">
+          <label>
+            <span>Nome do ponto de destino</span>
+            <input id="nome-destino" name="nomeDestino" type="text" placeholder="Ex.: Cozinha Comunitária Esperança" required>
+          </label>
+          <label>
+            <span>Tipo</span>
+            <select id="tipo-destino" name="tipoDestino" required>
+              <option value="">Selecione o tipo</option>
+              <option>ONG</option>
+              <option>Escola</option>
+              <option>Cozinha comunitária</option>
+              <option>Banco de alimentos</option>
+              <option>Associação</option>
+              <option>Igreja</option>
+              <option>Centro comunitário</option>
+              <option>Projeto social</option>
+              <option>Outro</option>
+            </select>
+          </label>
+          <!-- Campo complementar exibido apenas quando a opção Outro for escolhida. -->
+          <label class="campo-condicional" data-campo-outro-destino hidden>
+            <span>Informe o tipo do ponto de destino</span>
+            <input id="outro-tipo-destino" name="outroTipoDestino" type="text" placeholder="Ex.: Abrigo municipal">
+          </label>
+          <label>
+            <span>Cidade</span>
+            <input id="cidade-destino" name="cidadeDestino" type="text" placeholder="Ex.: Londrina" required>
+          </label>
+          <label>
+            <span>Bairro/Vila</span>
+            <input id="bairro-destino" name="bairroDestino" type="text" placeholder="Ex.: Vila Verde" required>
+          </label>
+          <label>
+            <span>Pessoas atendidas</span>
+            <input id="pessoas-destino" name="pessoasDestino" type="number" min="1" step="1" placeholder="Ex.: 120" required>
+          </label>
+          <label>
+            <span>Refeições médias por dia</span>
+            <input id="refeicoes-destino" name="refeicoesDestino" type="number" min="0" step="1" placeholder="Ex.: 200" required>
+          </label>
+          <button class="botao-formulario" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            Cadastrar ponto
+          </button>
+        </form>
+      </section>
+
+      <!-- Lista visual usada para conferir os pontos disponíveis ao algoritmo. -->
+      <section class="painel" aria-labelledby="titulo-lista-destinos">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Rede disponível</p>
+            <h2 id="titulo-lista-destinos">Pontos de destino cadastrados</h2>
+          </div>
+          <span><strong data-total-destinos>0</strong> pontos cadastrados</span>
+        </div>
+        <div class="grade-cadastros" data-lista-destinos>
+          <div class="estado-vazio">
+            <h3>Nenhum ponto de destino cadastrado</h3>
+            <p>Cadastre locais de atendimento para tornar as sugestões mais inteligentes.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+    <!-- FIM DA ABA: PONTOS DE DESTINO -->
+
+    <!-- =========================
+    INÍCIO DA ABA: DOAÇÃO
+    Permite cadastrar vários alimentos antes de processar a redistribuição.
+    O JavaScript usa esta área para montar a lista e sugerir destinos.
+    ========================== -->
+    <section class="secao-aba" id="section-doacao" data-secao="doacao" hidden>
+      <header class="cabecalho-pagina">
+        <p class="secao-etiqueta">Cadastro responsável</p>
+        <h1>Registrar nova doação</h1>
+        <p>Inclua os alimentos disponíveis. O EcoChain usa a data de vencimento, a categoria e os pontos cadastrados para sugerir uma redistribuição responsável.</p>
+      </header>
+
+      <!-- Aviso que informa qual parceiro será associado às novas doações. -->
+      <aside class="aviso-doador" data-aviso-doador>
+        <div>
+          <strong>Nenhum doador ativo selecionado</strong>
+          <p>Cadastre ou selecione um parceiro na aba Doadores antes de registrar alimentos.</p>
+        </div>
+        <button type="button" data-ir-doadores>Selecionar doador</button>
+      </aside>
+
+      <!-- Formulário utilizado para adicionar um alimento por vez à lista. -->
+      <section class="painel painel-formulario" aria-labelledby="titulo-formulario-doacao">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Etapa 1</p>
+            <h2 id="titulo-formulario-doacao">Dados do alimento</h2>
+          </div>
+          <span>Todos os campos são obrigatórios</span>
+        </div>
+
+        <form class="formulario-doacao" id="form-doacao">
+          <label>
+            <span>Nome do alimento</span>
+            <input id="alimento" name="alimento" type="text" placeholder="Ex.: arroz, leite, banana" required>
+          </label>
+
+          <label>
+            <span>Categoria</span>
+            <select id="categoria" name="categoria" required>
+              <option value="">Selecione uma categoria</option>
+              <option>Hortifruti</option>
+              <option>Carnes</option>
+              <option>Laticínios</option>
+              <option>Padaria</option>
+              <option>Refeições prontas</option>
+              <option>Grãos e cereais</option>
+              <option>Enlatados</option>
+              <option>Bebidas</option>
+              <option>Outros</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Quantidade (kg)</span>
+            <input id="quantidade" name="quantidade" type="number" min="0.1" step="0.1" placeholder="Ex.: 10" required>
+          </label>
+
+          <label>
+            <span>Data de vencimento</span>
+            <input id="validade" name="validade" type="date" required>
+          </label>
+
+          <button class="botao-formulario" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            Adicionar à lista
+          </button>
+        </form>
+      </section>
+
+      <!-- Lista visual preenchida automaticamente após cada cadastro. -->
+      <section class="painel painel-lista" aria-labelledby="titulo-lista-doacoes">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Etapa 2</p>
+            <h2 id="titulo-lista-doacoes">Doações cadastradas</h2>
+          </div>
+          <span><strong data-total-itens>0</strong> itens na lista</span>
+        </div>
+
+        <div class="lista-doacoes" data-lista-doacoes>
+          <div class="estado-vazio" data-lista-vazia>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V10M18 20V4M6 20v-6M3 20h18" /></svg>
+            <h3>Nenhuma doação adicionada</h3>
+            <p>Use o formulário acima para começar a montar a redistribuição.</p>
+          </div>
+        </div>
+
+        <button class="botao-processar" type="button" data-processar disabled>
+          Processar Redistribuição
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+        </button>
+      </section>
+
+      <!-- Painel exibido após o cálculo automático das prioridades e destinos. -->
+      <section class="painel painel-resultado" aria-labelledby="titulo-resultado">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Etapa 3</p>
+            <h2 id="titulo-resultado">Resultado da redistribuição</h2>
+          </div>
+        </div>
+        <div class="resultado-conteudo" data-resultado>
+          <p>Cadastre os alimentos e processe a redistribuição para visualizar o resumo.</p>
+        </div>
+      </section>
+    </section>
+    <!-- FIM DA ABA: DOAÇÃO -->
+
+    <!-- =========================
+    INÍCIO DA ABA: RELATÓRIO
+    Apresenta o dashboard consolidado e o histórico processado.
+    Os números são atualizados pelo mesmo JavaScript usado na aba Doação.
+    ========================== -->
+    <section class="secao-aba" id="section-relatorio" data-secao="relatorio" hidden>
+      <header class="cabecalho-pagina">
+        <p class="secao-etiqueta">Acompanhamento EcoChain</p>
+        <h1>Impacto gerado pela rede EcoChain</h1>
+        <p>Acompanhe como cada conexão transforma alimentos disponíveis em alcance social, organização e responsabilidade ambiental.</p>
+      </header>
+
+      <!-- Cards resumidos do dashboard analítico. -->
+      <section class="dashboard-grade" aria-label="Estatísticas consolidadas">
+        <article class="dashboard-card">
+          <span>Alimentos salvos</span>
+          <strong><b data-relatorio="alimentosSalvos">0</b> kg</strong>
+          <p>Total redirecionado pela rede.</p>
+        </article>
+        <article class="dashboard-card">
+          <span>Pessoas alcançadas</span>
+          <strong data-relatorio="pessoasAlcancadas">0</strong>
+          <p>Capacidade total dos pontos cadastrados.</p>
+        </article>
+        <article class="dashboard-card">
+          <span>Doadores cadastrados</span>
+          <strong data-relatorio="doadoresCadastrados">0</strong>
+          <p>Parceiros registrados na plataforma.</p>
+        </article>
+        <article class="dashboard-card">
+          <span>Pontos de destino</span>
+          <strong data-relatorio="pontosDestino">0</strong>
+          <p>Locais disponíveis para receber alimentos.</p>
+        </article>
+        <article class="dashboard-card">
+          <span>Doações processadas</span>
+          <strong data-relatorio="doacoesProcessadas">0</strong>
+          <p>Itens com destino sugerido.</p>
+        </article>
+        <article class="dashboard-card">
+          <span>Itens em atenção</span>
+          <strong data-relatorio="itensAtencao">0</strong>
+          <p>Itens expirados que exigem conferência.</p>
+        </article>
+        <article class="dashboard-card">
+          <span>Cidades cadastradas</span>
+          <strong data-relatorio="cidadesCadastradas">0</strong>
+          <p>Municípios presentes na rede EcoChain.</p>
+        </article>
+        <article class="dashboard-card">
+          <span>Bairros/Vilas cadastrados</span>
+          <strong data-relatorio="bairrosCadastrados">0</strong>
+          <p>Comunidades conectadas pela plataforma.</p>
+        </article>
+      </section>
+
+      <!-- =========================
+      Painel visual do dashboard
+      Reúne gráficos simples criados apenas com HTML, CSS e JavaScript.
+      Nenhuma biblioteca externa é necessária para atualizar os dados.
+      ========================== -->
+      <section class="dashboard-analitico" aria-label="Gráficos analíticos da rede EcoChain">
+        <article class="grafico-card grafico-prioridades">
+          <div class="grafico-cabecalho">
+            <div>
+              <p class="secao-etiqueta">Distribuição</p>
+              <h2>Prioridades processadas</h2>
+            </div>
+            <span>Visão geral dos alimentos</span>
+          </div>
+          <div class="grafico-rosca-area">
+            <div class="grafico-rosca" data-grafico-prioridades aria-label="Gráfico de rosca das prioridades">
+              <div>
+                <strong data-total-prioridades>0</strong>
+                <span>itens</span>
+              </div>
+            </div>
+            <div class="legenda-prioridades" data-legenda-prioridades></div>
+          </div>
+        </article>
+
+        <article class="grafico-card">
+          <div class="grafico-cabecalho">
+            <div>
+              <p class="secao-etiqueta">Categorias</p>
+              <h2>Doações por categoria</h2>
+            </div>
+          </div>
+          <div class="barras-verticais" data-grafico-categorias></div>
+        </article>
+
+        <article class="grafico-card">
+          <div class="grafico-cabecalho">
+            <div>
+              <p class="secao-etiqueta">Parceiros</p>
+              <h2>Tipos de doadores</h2>
+            </div>
+          </div>
+          <div class="barras-horizontais" data-grafico-doadores></div>
+        </article>
+
+        <article class="grafico-card">
+          <div class="grafico-cabecalho">
+            <div>
+              <p class="secao-etiqueta">Abrangência</p>
+              <h2>Rede por localidade</h2>
+            </div>
+          </div>
+          <div class="localidades-grade">
+            <div>
+              <strong data-total-cidades>0</strong>
+              <span>Cidades</span>
+              <p data-lista-cidades>Nenhuma cidade cadastrada.</p>
+            </div>
+            <div>
+              <strong data-total-bairros>0</strong>
+              <span>Bairros/Vilas</span>
+              <p data-lista-bairros>Nenhum bairro ou vila cadastrado.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Histórico preenchido com cada item processado na aba Doação. -->
+      <section class="painel painel-historico" aria-labelledby="titulo-historico">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Movimentações recentes</p>
+            <h2 id="titulo-historico">Caminhos percorridos pelos alimentos</h2>
+          </div>
+          <span>Linha do tempo das decisões processadas</span>
+        </div>
+        <div class="tabela-container">
+          <table class="tabela-historico">
+            <thead>
+              <tr>
+                <th>Alimento</th>
+                <th>Instituição doadora</th>
+                <th>Quantidade</th>
+                <th>Vencimento</th>
+                <th>Status</th>
+                <th>Destino conectado</th>
+              </tr>
+            </thead>
+            <tbody data-historico>
+              <tr class="linha-vazia">
+                <td colspan="6">Nenhuma redistribuição foi processada até o momento.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+    <!-- FIM DA ABA: RELATÓRIO -->
+  </main>
+
+  <!-- =========================
+  MODAL: SAIBA MAIS
+  Apresentação ampla do produto em seis seções visuais.
+  As imagens já existentes no projeto reforçam sustentabilidade,
+  desperdício, redistribuição e impacto sem adicionar dependências.
+  ========================== -->
+  <div class="modal-overlay" data-modal-saiba-mais hidden>
+    <section class="modal-saiba-mais" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-saiba-mais">
+      <button class="modal-fechar" type="button" data-fechar-modal aria-label="Fechar informações sobre o EcoChain">&times;</button>
+
+      <header class="modal-hero" style="--imagem-modal: url('assets/images/hero-planeta.png')">
+        <div>
+          <p class="secao-etiqueta">Tecnologia aplicada à sustentabilidade</p>
+          <h2 id="titulo-modal-saiba-mais">O que é o EcoChain</h2>
+          <p>Uma plataforma educacional que simula uma rede inteligente de redistribuição. O EcoChain conecta instituições doadoras, alimentos disponíveis e pontos de destino para transformar informação em decisões responsáveis.</p>
+        </div>
+      </header>
+
+      <div class="modal-apresentacao">
+        <article class="modal-cena modal-cena-imagem" style="--imagem-modal: url('assets/images/hero-alimentos.png')">
+          <div class="modal-cena-conteudo">
+            <p class="modal-numero">01</p>
+            <h3>O problema que queremos resolver</h3>
+            <p>Alimentos próprios para consumo ainda podem ser descartados quando faltam organização e rapidez. Registrar a data de vencimento ajuda a enxergar o tempo disponível e agir antes que uma oportunidade de doação seja perdida.</p>
+          </div>
+        </article>
+
+        <article class="modal-cena modal-cena-fluxo">
+          <div class="modal-cena-conteudo">
+            <p class="modal-numero">02</p>
+            <h3>Como funciona</h3>
+            <p>A plataforma organiza o caminho do alimento em etapas simples, fáceis de acompanhar e explicar.</p>
+          </div>
+          <div class="fluxo-redistribuicao" aria-label="Fluxo da redistribuição EcoChain">
+            <span>Doador</span><i>→</i>
+            <span>Cadastro</span><i>→</i>
+            <span>Classificação</span><i>→</i>
+            <span>Redistribuição</span><i>→</i>
+            <span>Ponto de destino</span>
+          </div>
+        </article>
+
+        <article class="modal-cena modal-cena-imagem modal-cena-impacto" style="--imagem-modal: url('assets/images/hero-comunidade.png')">
+          <div class="modal-cena-conteudo">
+            <p class="modal-numero">03</p>
+            <h3>Impacto social e ambiental</h3>
+            <p>A iniciativa fortalece redes locais e amplia a capacidade de atendimento das comunidades. Ao mesmo tempo, reduz o descarte desnecessário de recursos empregados na produção, no transporte e no armazenamento dos alimentos.</p>
+          </div>
+        </article>
+
+        <article class="modal-cena modal-cena-dupla">
+          <div class="modal-cena-conteudo">
+            <p class="modal-numero">04</p>
+            <h3>Segurança e responsabilidade</h3>
+            <p>A prioridade considera validade e perecibilidade. Itens com validade expirada ficam em conferência obrigatória e não são recomendados para redistribuição direta ao consumo.</p>
+          </div>
+          <div class="modal-destaque">
+            <strong>Agrinho 2026</strong>
+            <p>“Agro forte, futuro sustentável: equilíbrio entre produção e meio ambiente.”</p>
+          </div>
+        </article>
+
+        <article class="modal-cena modal-cena-legislacao">
+          <div>
+            <p class="modal-numero">05</p>
+            <h3>ODS e legislação brasileira</h3>
+            <p>A Lei nº 14.016/2020 foi um marco no combate ao desperdício e na doação de excedentes para consumo humano. Em 2025, ela foi revogada pela Lei nº 15.224/2025, que instituiu a Política Nacional de Combate à Perda e ao Desperdício de Alimentos.</p>
+          </div>
+          <div class="ods-faixa">
+            <span><b>ODS 2</b> Fome zero e agricultura sustentável</span>
+            <span><b>ODS 12</b> Consumo e produção responsáveis</span>
+          </div>
+        </article>
+
+        <article class="modal-cena modal-cena-final">
+          <p class="modal-numero">06</p>
+          <h3>Conectar para transformar.</h3>
+          <p>Cada alimento redirecionado representa uma escolha mais consciente. O EcoChain mostra como tecnologia, produção e responsabilidade podem caminhar na mesma direção.</p>
+          <button class="modal-cta" type="button" data-modal-ir-doacao>Conhecer a redistribuição</button>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <footer class="rodape">
+    <div class="rodape-conteudo">
+      <div class="rodape-marca">
+        <a class="rodape-logo" href="#inicio" aria-label="EcoChain - voltar ao início">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M14 18 9 23a5 5 0 0 1-7-7l5-5a5 5 0 0 1 7 0" />
+            <path d="m18 14 5-5a5 5 0 0 1 7 7l-5 5a5 5 0 0 1-7 0" />
+            <path d="m11 21 10-10" />
+            <path class="folha-rodape" d="M12 13C11 6 15 2 23 2c0 7-4 11-11 11Z" />
+          </svg>
+          <span><strong><b>Eco</b>Chain</strong><small>Conectando alimentos, transformando vidas.</small></span>
+        </a>
+        <p>Tecnologia e solidariedade para reduzir o desperdício de alimentos e aproximar quem pode doar de quem precisa receber.</p>
+      </div>
+
+      <div class="rodape-coluna">
+        <h3>Navegue</h3>
+        <a href="#inicio">Início</a>
+        <a href="#doadores">Doadores</a>
+        <a href="#destinos">Pontos de Destino</a>
+        <a href="#doacao">Doação</a>
+        <a href="#relatorio">Relatório de impacto</a>
+      </div>
+
+      <div class="rodape-coluna">
+        <h3>Projeto</h3>
+        <a href="#saiba-mais" data-abrir-modal>Sobre o EcoChain</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#relatorio">Indicadores</a>
+      </div>
+
+      <div class="rodape-coluna rodape-institucional">
+        <h3>Iniciativa educacional</h3>
+        <p>Projeto desenvolvido para o Agrinho 2026, unindo inovação, sustentabilidade e responsabilidade social.</p>
+        <span class="selo-agrinho">Agrinho <b>2026</b></span>
+      </div>
+    </div>
+
+    <div class="rodape-base">
+      <p>© <span data-ano-atual></span> EcoChain. Projeto educacional desenvolvido com propósito.</p>
+      <p>Feito com consciência ambiental.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

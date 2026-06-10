@@ -12,7 +12,8 @@
 </head>
 <body>
   <header class="topo">
-    <a class="marca" href="#" aria-label="EcoChain - página inicial">
+    <div class="marca" aria-label="EcoChain">
+      <button class="marca-simbolo-botao demo-inativa" type="button" data-demo-toggle aria-label="Ativar demonstração" title="Ativar demonstração">
       <svg class="marca-simbolo" viewBox="0 0 136 88" aria-hidden="true">
         <defs>
           <linearGradient id="eloVerde" x1="0" x2="1" y1="0" y2="1">
@@ -34,6 +35,7 @@
           <path class="folha-nervura" d="M54 54C59 32 66 16 75 5M57 42l-11-8M61 32l-10-7M66 22l-9-5M58 43l13-11M62 33l12-11M67 22l8-8" />
         </g>
       </svg>
+      </button>
 
       <span class="marca-divisor" aria-hidden="true"></span>
 
@@ -41,7 +43,7 @@
         <strong><span>Eco</span>Chain</strong>
         <small>Conectando alimentos, transformando vidas.</small>
       </span>
-    </a>
+    </div>
 
     <p class="slogan-topo">
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -286,7 +288,7 @@
         <form class="formulario-cadastro formulario-doador" id="form-doador">
           <label>
             <span>Nome da instituição</span>
-            <input id="nome-doador" name="nomeDoador" type="text" placeholder="Ex.: Mercado Central" required>
+            <input id="nome-doador" name="nomeDoador" type="text" list="lista-nomes-doadores" placeholder="Ex.: Mercado Central" required>
           </label>
           <label>
             <span>Tipo do doador</span>
@@ -312,7 +314,7 @@
           <!-- Campo complementar exibido apenas quando a opção Outro for escolhida. -->
           <label class="campo-condicional" data-campo-outro-doador hidden>
             <span>Informe o tipo do doador</span>
-            <input id="outro-tipo-doador" name="outroTipoDoador" type="text" placeholder="Ex.: Feira livre">
+            <input id="outro-tipo-doador" name="outroTipoDoador" type="text" list="lista-tipos-personalizados" placeholder="Ex.: Feira livre">
           </label>
           <label>
             <span>Nome do responsável</span>
@@ -332,11 +334,13 @@
           </label>
           <label>
             <span>Cidade</span>
-            <input id="cidade-doador" name="cidadeDoador" type="text" placeholder="Ex.: Londrina" required>
+            <input id="cidade-doador" name="cidadeDoador" type="text" list="lista-cidades" placeholder="Ex.: Londrina" required>
+            <small class="dica-datalist">Sugestões ajudam a evitar cadastros duplicados no relatório.</small>
           </label>
           <label>
             <span>Bairro/Vila</span>
-            <input id="bairro-doador" name="bairroDoador" type="text" placeholder="Ex.: Centro" required>
+            <input id="bairro-doador" name="bairroDoador" type="text" list="lista-bairros" placeholder="Ex.: Centro" required>
+            <small class="dica-datalist">Sugestões ajudam a evitar cadastros duplicados no relatório.</small>
           </label>
           <button class="botao-formulario" type="submit">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
@@ -389,7 +393,7 @@
         <form class="formulario-cadastro formulario-destino" id="form-destino">
           <label>
             <span>Nome do ponto de destino</span>
-            <input id="nome-destino" name="nomeDestino" type="text" placeholder="Ex.: Cozinha Comunitária Esperança" required>
+            <input id="nome-destino" name="nomeDestino" type="text" list="lista-nomes-destinos" placeholder="Ex.: Cozinha Comunitária Esperança" required>
           </label>
           <label>
             <span>Tipo</span>
@@ -409,15 +413,17 @@
           <!-- Campo complementar exibido apenas quando a opção Outro for escolhida. -->
           <label class="campo-condicional" data-campo-outro-destino hidden>
             <span>Informe o tipo do ponto de destino</span>
-            <input id="outro-tipo-destino" name="outroTipoDestino" type="text" placeholder="Ex.: Abrigo municipal">
+            <input id="outro-tipo-destino" name="outroTipoDestino" type="text" list="lista-tipos-personalizados" placeholder="Ex.: Abrigo municipal">
           </label>
           <label>
             <span>Cidade</span>
-            <input id="cidade-destino" name="cidadeDestino" type="text" placeholder="Ex.: Londrina" required>
+            <input id="cidade-destino" name="cidadeDestino" type="text" list="lista-cidades" placeholder="Ex.: Londrina" required>
+            <small class="dica-datalist">Sugestões ajudam a evitar cadastros duplicados no relatório.</small>
           </label>
           <label>
             <span>Bairro/Vila</span>
-            <input id="bairro-destino" name="bairroDestino" type="text" placeholder="Ex.: Vila Verde" required>
+            <input id="bairro-destino" name="bairroDestino" type="text" list="lista-bairros" placeholder="Ex.: Vila Verde" required>
+            <small class="dica-datalist">Sugestões ajudam a evitar cadastros duplicados no relatório.</small>
           </label>
           <label>
             <span>Pessoas atendidas</span>
@@ -487,7 +493,8 @@
         <form class="formulario-doacao" id="form-doacao">
           <label>
             <span>Nome do alimento</span>
-            <input id="alimento" name="alimento" type="text" placeholder="Ex.: arroz, leite, banana" required>
+            <input id="alimento" name="alimento" type="text" list="lista-alimentos" placeholder="Ex.: arroz, leite, banana" required>
+            <small class="dica-datalist">Sugestões ajudam a manter alimentos com a mesma escrita.</small>
           </label>
 
           <label>
@@ -499,11 +506,13 @@
               <option>Laticínios</option>
               <option>Padaria</option>
               <option>Refeições prontas</option>
+              <option>Mercearia</option>
               <option>Grãos e cereais</option>
               <option>Enlatados</option>
               <option>Bebidas</option>
               <option>Outros</option>
             </select>
+            <small class="aviso-categoria" data-aviso-categoria hidden></small>
           </label>
 
           <label>
@@ -523,12 +532,48 @@
         </form>
       </section>
 
-      <!-- Lista visual preenchida automaticamente após cada cadastro. -->
-      <section class="painel painel-lista" aria-labelledby="titulo-lista-doacoes">
+      <!--
+      ETAPA 2: DOAÇÕES A PROCESSAR
+      Mostra somente os alimentos que ainda não passaram pelo algoritmo.
+      O botão de processamento fica no topo para não se perder em listas longas.
+      -->
+      <section class="painel painel-etapa painel-processamento" aria-labelledby="titulo-lista-pendentes">
         <div class="painel-titulo">
           <div>
             <p class="secao-etiqueta">Etapa 2</p>
+            <h2 id="titulo-lista-pendentes">Doações a processar</h2>
+            <small>Revise os itens pendentes e execute a redistribuição inteligente.</small>
+          </div>
+          <span><strong data-total-pendentes>0</strong> itens pendentes</span>
+        </div>
+
+        <div class="barra-processamento">
+          <button class="botao-processar" type="button" data-processar disabled>
+            Processar Redistribuição
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+          </button>
+        </div>
+
+        <div class="lista-doacoes lista-doacoes-pendentes" data-lista-doacoes-pendentes>
+          <div class="estado-vazio">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V10M18 20V4M6 20v-6M3 20h18" /></svg>
+            <h3>Nenhuma doação pendente</h3>
+            <p>Cadastre um alimento ou processe os itens já adicionados.</p>
+          </div>
+        </div>
+      </section>
+
+      <!--
+      ETAPA 3: DOAÇÕES CADASTRADAS
+      Lista geral com tudo que entrou na plataforma, sempre com os registros
+      mais recentes no topo para facilitar conferência durante apresentações.
+      -->
+      <section class="painel painel-etapa painel-lista" aria-labelledby="titulo-lista-doacoes">
+        <div class="painel-titulo">
+          <div>
+            <p class="secao-etiqueta">Etapa 3</p>
             <h2 id="titulo-lista-doacoes">Doações cadastradas</h2>
+            <small>Acompanhe todos os alimentos registrados na sessão atual.</small>
           </div>
           <span><strong data-total-itens>0</strong> itens na lista</span>
         </div>
@@ -540,19 +585,19 @@
             <p>Use o formulário acima para começar a montar a redistribuição.</p>
           </div>
         </div>
-
-        <button class="botao-processar" type="button" data-processar disabled>
-          Processar Redistribuição
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
-        </button>
       </section>
 
-      <!-- Painel exibido após o cálculo automático das prioridades e destinos. -->
-      <section class="painel painel-resultado" aria-labelledby="titulo-resultado">
+      <!--
+      ETAPA 4: INFORMATIVO DA REDISTRIBUIÇÃO
+      Resume a classificação por prioridade após o processamento.
+      A estrutura já fica preparada para futuros cards clicáveis.
+      -->
+      <section class="painel painel-etapa painel-resultado" aria-labelledby="titulo-resultado">
         <div class="painel-titulo">
           <div>
-            <p class="secao-etiqueta">Etapa 3</p>
-            <h2 id="titulo-resultado">Resultado da redistribuição</h2>
+            <p class="secao-etiqueta">Etapa 4</p>
+            <h2 id="titulo-resultado">Informativo da Redistribuição</h2>
+            <small>Veja como o sistema classificou os alimentos por prioridade.</small>
           </div>
         </div>
         <div class="resultado-conteudo" data-resultado>
@@ -568,54 +613,64 @@
     Os números são atualizados pelo mesmo JavaScript usado na aba Doação.
     ========================== -->
     <section class="secao-aba" id="section-relatorio" data-secao="relatorio" hidden>
-      <header class="cabecalho-pagina">
+      <header class="relatorio-hero">
+        <div class="relatorio-hero-texto">
         <p class="secao-etiqueta">Acompanhamento EcoChain</p>
-        <h1>Impacto gerado pela rede EcoChain</h1>
-        <p>Acompanhe como cada conexão transforma alimentos disponíveis em alcance social, organização e responsabilidade ambiental.</p>
-      </header>
+          <h1>Impacto da redistribuição</h1>
+          <p>Os dados abaixo são gerados pela simulação de doadores, pontos de destino e alimentos cadastrados. A leitura mostra o que foi salvo, onde a rede alcançou pessoas e quais itens exigem conferência.</p>
+        </div>
 
-      <!-- Cards resumidos do dashboard analítico. -->
-      <section class="dashboard-grade" aria-label="Estatísticas consolidadas">
-        <article class="dashboard-card">
+        <article class="relatorio-destaque">
           <span>Alimentos salvos</span>
           <strong><b data-relatorio="alimentosSalvos">0</b> kg</strong>
-          <p>Total redirecionado pela rede.</p>
+          <p>Total redirecionado com destino responsável.</p>
         </article>
+      </header>
+
+      <!-- Métricas secundárias em grade simétrica para leitura imediata. -->
+      <section class="dashboard-grade" aria-label="Estatísticas consolidadas">
         <article class="dashboard-card">
           <span>Pessoas alcançadas</span>
           <strong data-relatorio="pessoasAlcancadas">0</strong>
           <p>Capacidade total dos pontos cadastrados.</p>
         </article>
         <article class="dashboard-card">
-          <span>Doadores cadastrados</span>
-          <strong data-relatorio="doadoresCadastrados">0</strong>
-          <p>Parceiros registrados na plataforma.</p>
-        </article>
-        <article class="dashboard-card">
-          <span>Pontos de destino</span>
-          <strong data-relatorio="pontosDestino">0</strong>
-          <p>Locais disponíveis para receber alimentos.</p>
-        </article>
-        <article class="dashboard-card">
           <span>Doações processadas</span>
           <strong data-relatorio="doacoesProcessadas">0</strong>
           <p>Itens com destino sugerido.</p>
         </article>
-        <article class="dashboard-card">
+        <article class="dashboard-card dashboard-card-atencao">
           <span>Itens em atenção</span>
           <strong data-relatorio="itensAtencao">0</strong>
-          <p>Itens expirados que exigem conferência.</p>
+          <p>Validade expirada exige conferência, sem redistribuição direta.</p>
         </article>
         <article class="dashboard-card">
-          <span>Cidades cadastradas</span>
+          <span>Cidades atendidas</span>
           <strong data-relatorio="cidadesCadastradas">0</strong>
-          <p>Municípios presentes na rede EcoChain.</p>
+          <p>Municípios presentes na rede simulada.</p>
         </article>
         <article class="dashboard-card">
-          <span>Bairros/Vilas cadastrados</span>
+          <span>Bairros/Vilas atendidos</span>
           <strong data-relatorio="bairrosCadastrados">0</strong>
           <p>Comunidades conectadas pela plataforma.</p>
         </article>
+        <article class="dashboard-card dashboard-card-rede">
+          <span>Rede cadastrada</span>
+          <strong><b data-relatorio="doadoresCadastrados">0</b>/<b data-relatorio="pontosDestino">0</b></strong>
+          <p>Doadores e pontos de destino disponíveis.</p>
+        </article>
+      </section>
+
+      <!-- Estado vazio intencional: orienta a banca antes da simulação gerar dados. -->
+      <section class="relatorio-vazio" data-relatorio-vazio aria-label="Como gerar indicadores no relatório">
+        <p>Cadastre um doador, um ponto de destino e uma doação para gerar indicadores de impacto.</p>
+        <div>
+          <span>Cadastrar parceiro</span>
+          <span>Registrar destino</span>
+          <span>Informar alimento</span>
+          <span>Processar redistribuição</span>
+          <span>Ver impacto</span>
+        </div>
       </section>
 
       <!-- =========================
@@ -628,18 +683,18 @@
           <div class="grafico-cabecalho">
             <div>
               <p class="secao-etiqueta">Distribuição</p>
-              <h2>Prioridades processadas</h2>
+              <h2>Prioridade por validade</h2>
             </div>
-            <span>Visão geral dos alimentos</span>
+            <span>Itens expirados entram em atenção e não seguem para consumo direto.</span>
           </div>
           <div class="grafico-rosca-area">
-            <div class="grafico-rosca" data-grafico-prioridades aria-label="Gráfico de rosca das prioridades">
+            <div class="prioridades-resumo" data-grafico-prioridades aria-label="Resumo das prioridades processadas">
               <div>
                 <strong data-total-prioridades>0</strong>
                 <span>itens</span>
               </div>
             </div>
-            <div class="legenda-prioridades" data-legenda-prioridades></div>
+            <div class="prioridades-barras" data-legenda-prioridades></div>
           </div>
         </article>
 
@@ -648,6 +703,7 @@
             <div>
               <p class="secao-etiqueta">Categorias</p>
               <h2>Doações por categoria</h2>
+              <small>Mostra quais grupos de alimentos aparecem mais na simulação.</small>
             </div>
           </div>
           <div class="barras-verticais" data-grafico-categorias></div>
@@ -658,6 +714,7 @@
             <div>
               <p class="secao-etiqueta">Parceiros</p>
               <h2>Tipos de doadores</h2>
+              <small>Ajuda a entender quem sustenta a rede de doação.</small>
             </div>
           </div>
           <div class="barras-horizontais" data-grafico-doadores></div>
@@ -668,6 +725,7 @@
             <div>
               <p class="secao-etiqueta">Abrangência</p>
               <h2>Rede por localidade</h2>
+              <small>Mostra onde a rede simulada concentra maior alcance territorial.</small>
             </div>
           </div>
           <div class="localidades-grade">
@@ -680,6 +738,12 @@
               <strong data-total-bairros>0</strong>
               <span>Bairros/Vilas</span>
               <p data-lista-bairros>Nenhum bairro ou vila cadastrado.</p>
+            </div>
+          </div>
+          <div class="localidades-detalhadas" data-localidades-detalhadas>
+            <div class="estado-vazio">
+              <h3>Nenhuma localidade detalhada</h3>
+              <p>Cadastre doadores e pontos de destino para visualizar cidades, bairros e parceiros.</p>
             </div>
           </div>
         </article>
@@ -719,88 +783,276 @@
   </main>
 
   <!-- =========================
+  MODAL: FILTRO POR PRIORIDADE
+  Janela simples usada apenas para leitura detalhada das doações
+  filtradas pelos cards da Etapa 4. Não edita nem remove registros.
+  ========================== -->
+  <div class="modal-filtro-overlay" data-modal-filtro hidden>
+    <section class="modal-filtro" role="dialog" aria-modal="true" aria-labelledby="titulo-filtro-prioridade">
+      <button class="modal-filtro-fechar" type="button" data-fechar-modal-filtro aria-label="Fechar filtro de prioridade">&times;</button>
+      <header class="modal-filtro-cabecalho">
+        <p class="secao-etiqueta">Leitura detalhada</p>
+        <h2 id="titulo-filtro-prioridade" data-titulo-filtro-prioridade>Doações filtradas</h2>
+        <span data-contagem-filtro-prioridade>0 itens encontrados</span>
+      </header>
+      <div class="lista-filtro-prioridade" data-lista-filtro-prioridade>
+        <div class="estado-vazio">
+          <h3>Nenhuma doação encontrada para este filtro.</h3>
+          <p>Processe a redistribuição ou escolha outra prioridade.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- =========================
   MODAL: SAIBA MAIS
-  Apresentação ampla do produto em seis seções visuais.
-  As imagens já existentes no projeto reforçam sustentabilidade,
-  desperdício, redistribuição e impacto sem adicionar dependências.
+  Apresentação ampla do produto em uma jornada visual.
+  Cada cena tem uma função: explicar problema, funcionamento,
+  impacto, segurança, legislação, origem escolar e missão.
   ========================== -->
   <div class="modal-overlay" data-modal-saiba-mais hidden>
     <section class="modal-saiba-mais" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-saiba-mais">
       <button class="modal-fechar" type="button" data-fechar-modal aria-label="Fechar informações sobre o EcoChain">&times;</button>
+      <div class="modal-progresso" aria-hidden="true"><span data-modal-progresso></span></div>
 
       <header class="modal-hero" style="--imagem-modal: url('assets/images/hero-planeta.png')">
         <div>
-          <p class="secao-etiqueta">Tecnologia aplicada à sustentabilidade</p>
-          <h2 id="titulo-modal-saiba-mais">O que é o EcoChain</h2>
-          <p>Uma plataforma educacional que simula uma rede inteligente de redistribuição. O EcoChain conecta instituições doadoras, alimentos disponíveis e pontos de destino para transformar informação em decisões responsáveis.</p>
+          <p class="secao-etiqueta">Da perda ao impacto</p>
+          <h2 id="titulo-modal-saiba-mais">A jornada EcoChain</h2>
+          <strong class="modal-hero-frase">Tecnologia, alimento e comunidade na mesma corrente.</strong>
+          <p>Uma simulação educativa de uma rede inteligente de redistribuição de alimentos. O projeto usa HTML, CSS e JavaScript para mostrar como informação, tempo e destino podem reduzir desperdícios.</p>
+          <div class="modal-hero-metricas" aria-label="Pilares do EcoChain">
+            <span>Controle de validade</span>
+            <span>Destino responsável</span>
+            <span>Impacto visível</span>
+          </div>
         </div>
       </header>
 
       <div class="modal-apresentacao">
-        <article class="modal-cena modal-cena-imagem" style="--imagem-modal: url('assets/images/hero-alimentos.png')">
+        <article class="modal-cena modal-cena-horizontal modal-cena-clara">
           <div class="modal-cena-conteudo">
             <p class="modal-numero">01</p>
             <h3>O problema que queremos resolver</h3>
-            <p>Alimentos próprios para consumo ainda podem ser descartados quando faltam organização e rapidez. Registrar a data de vencimento ajuda a enxergar o tempo disponível e agir antes que uma oportunidade de doação seja perdida.</p>
+            <p>Alimentos próprios para consumo podem ser descartados quando não existe controle de validade, organização de estoque ou conexão rápida com pontos de destino. O EcoChain transforma esse cenário em uma jornada simples: identificar, classificar e encaminhar.</p>
+            <ul class="modal-lista">
+              <li>Tempo de validade passa a ser informação central.</li>
+              <li>Doadores e destinos entram em uma mesma rede visual.</li>
+              <li>Cada decisão fica registrada para apresentação e análise.</li>
+            </ul>
           </div>
+          <figure class="modal-visual">
+            <img src="assets/images/modal-problema.svg" alt="Caixas de alimentos com relógio representando controle de validade">
+          </figure>
         </article>
 
-        <article class="modal-cena modal-cena-fluxo">
+        <article class="modal-cena modal-cena-fluxo modal-cena-forte">
           <div class="modal-cena-conteudo">
             <p class="modal-numero">02</p>
-            <h3>Como funciona</h3>
-            <p>A plataforma organiza o caminho do alimento em etapas simples, fáceis de acompanhar e explicar.</p>
+            <h3>Como funciona na prática</h3>
+            <p>A redistribuição é simulada como uma trilha de decisão. Cada etapa mostra que o alimento não “some” do sistema: ele avança por regras claras até chegar a um destino sugerido.</p>
           </div>
-          <div class="fluxo-redistribuicao" aria-label="Fluxo da redistribuição EcoChain">
-            <span>Doador</span><i>→</i>
-            <span>Cadastro</span><i>→</i>
-            <span>Classificação</span><i>→</i>
-            <span>Redistribuição</span><i>→</i>
-            <span>Ponto de destino</span>
+          <div class="fluxo-tecnologico" aria-label="Linha do tempo da redistribuição EcoChain">
+            <article>
+              <span>01</span>
+              <strong>Doador informa alimentos</strong>
+              <p>Instituição ativa registra alimento, categoria, quantidade e vencimento.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <strong>Sistema calcula prioridade</strong>
+              <p>Validade e perecibilidade definem a urgência da redistribuição.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <strong>Alimento é classificado</strong>
+              <p>Itens expirados entram em atenção e não seguem direto para consumo.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <strong>Destino adequado é sugerido</strong>
+              <p>Bairro, cidade, volume, capacidade e tipo da instituição são comparados.</p>
+            </article>
+            <article>
+              <span>05</span>
+              <strong>Resultado aparece no relatório</strong>
+              <p>A banca visualiza impacto, histórico e indicadores da rede simulada.</p>
+            </article>
           </div>
+          <aside class="modal-slogan-fluxo" aria-label="Síntese da etapa de funcionamento">
+            <span>Chegamos onde somos necessários.</span>
+            <p>O sistema conecta alimento, tempo, doador e destino em uma decisão explicável.</p>
+          </aside>
         </article>
 
-        <article class="modal-cena modal-cena-imagem modal-cena-impacto" style="--imagem-modal: url('assets/images/hero-comunidade.png')">
+        <article class="modal-cena modal-cena-impacto modal-cena-media">
           <div class="modal-cena-conteudo">
             <p class="modal-numero">03</p>
             <h3>Impacto social e ambiental</h3>
-            <p>A iniciativa fortalece redes locais e amplia a capacidade de atendimento das comunidades. Ao mesmo tempo, reduz o descarte desnecessário de recursos empregados na produção, no transporte e no armazenamento dos alimentos.</p>
+            <p>O EcoChain atua em dois lados do mesmo problema: aproxima alimentos de quem pode receber e reduz o desperdício dos recursos usados para produzir, transportar e armazenar.</p>
           </div>
+          <div class="impacto-duplo">
+            <article>
+              <span>Social</span>
+              <strong>Alcance comunitário</strong>
+              <p>Pontos de destino cadastrados indicam sua capacidade de atendimento, permitindo visualizar quantas pessoas a rede pode alcançar.</p>
+            </article>
+            <article>
+              <span>Ambiental</span>
+              <strong>Menos descarte</strong>
+              <p>Quando o alimento encontra destino antes de expirar, também são valorizados água, energia, solo, transporte e trabalho usados na produção.</p>
+            </article>
+          </div>
+          <aside class="impacto-visual-css" aria-label="Relação entre alimento, comunidade, redução de desperdício e meio ambiente">
+            <span>Alimento aproveitado</span>
+            <i></i>
+            <span>Comunidade atendida</span>
+            <i></i>
+            <span>Menos desperdício</span>
+            <i></i>
+            <span>Meio ambiente protegido</span>
+          </aside>
         </article>
 
-        <article class="modal-cena modal-cena-dupla">
+        <article class="modal-cena modal-cena-horizontal modal-cena-seguranca modal-cena-clara">
           <div class="modal-cena-conteudo">
             <p class="modal-numero">04</p>
             <h3>Segurança e responsabilidade</h3>
-            <p>A prioridade considera validade e perecibilidade. Itens com validade expirada ficam em conferência obrigatória e não são recomendados para redistribuição direta ao consumo.</p>
+            <p>A plataforma não incentiva doar qualquer alimento de qualquer jeito. O sistema diferencia itens próximos do vencimento, alimentos perecíveis e produtos com validade expirada.</p>
+            <div class="seguranca-pontos">
+              <span>Validade expirada → conferência obrigatória</span>
+              <span>Alta perecibilidade → prioridade elevada</span>
+              <span>Destino sugerido → decisão explicada</span>
+            </div>
           </div>
-          <div class="modal-destaque">
-            <strong>Agrinho 2026</strong>
-            <p>“Agro forte, futuro sustentável: equilíbrio entre produção e meio ambiente.”</p>
-          </div>
+          <aside class="seguranca-visual-css" aria-label="Validade, conferência e decisão segura antes da redistribuição">
+            <span class="visual-calendario">Validade</span>
+            <span class="visual-alerta">Atenção</span>
+            <span class="visual-escudo">Conferência</span>
+            <span class="visual-check">Decisão segura</span>
+          </aside>
         </article>
 
-        <article class="modal-cena modal-cena-legislacao">
-          <div>
+        <article class="modal-cena modal-cena-legislacao modal-cena-forte">
+          <div class="modal-cena-conteudo">
             <p class="modal-numero">05</p>
-            <h3>ODS e legislação brasileira</h3>
-            <p>A Lei nº 14.016/2020 foi um marco no combate ao desperdício e na doação de excedentes para consumo humano. Em 2025, ela foi revogada pela Lei nº 15.224/2025, que instituiu a Política Nacional de Combate à Perda e ao Desperdício de Alimentos.</p>
+            <h3>Quando uma ideia local conversa com metas globais</h3>
+            <p>Por trás de cada alimento reaproveitado existe uma ideia maior: produzir, consumir e cuidar melhor. É esse caminho que aproxima o EcoChain dos Objetivos de Desenvolvimento Sustentável, as metas globais propostas pela ONU para orientar ações sociais, ambientais e econômicas.</p>
+            <p>Na prática, o projeto se conecta especialmente ao ODS 2, Fome Zero e Agricultura Sustentável, e ao ODS 12, Consumo e Produção Responsáveis, porque trata de alimento, desperdício, organização e cuidado com a comunidade.</p>
+            <p>No Brasil, a Lei nº 15.224/2025 institui a Política Nacional de Combate à Perda e ao Desperdício de Alimentos. Essa política reforça a importância de reduzir perdas, combater desperdício, incentivar doações responsáveis e melhorar o aproveitamento dos alimentos.</p>
           </div>
-          <div class="ods-faixa">
-            <span><b>ODS 2</b> Fome zero e agricultura sustentável</span>
-            <span><b>ODS 12</b> Consumo e produção responsáveis</span>
+          <div class="ods-painel ods-painel-textual" aria-label="Resumo de ODS e legislação ligados ao EcoChain">
+            <span><b>ODS 2</b> Fome Zero e Agricultura Sustentável</span>
+            <span><b>ODS 12</b> Consumo e Produção Responsáveis</span>
+            <span><b>Lei nº 15.224/2025</b> Política Nacional de Combate à Perda e ao Desperdício de Alimentos</span>
           </div>
         </article>
 
-        <article class="modal-cena modal-cena-final">
-          <p class="modal-numero">06</p>
-          <h3>Conectar para transformar.</h3>
-          <p>Cada alimento redirecionado representa uma escolha mais consciente. O EcoChain mostra como tecnologia, produção e responsabilidade podem caminhar na mesma direção.</p>
-          <button class="modal-cta" type="button" data-modal-ir-doacao>Conhecer a redistribuição</button>
+        <article class="modal-cena modal-cena-escola modal-cena-media">
+          <div class="modal-cena-conteudo">
+            <p class="modal-numero">06</p>
+            <h3>Onde essa ideia nasce</h3>
+            <p>O EcoChain nasce a partir de um olhar escolar e comunitário ligado ao Colégio Estadual do Campo Terezinha Ladir de Oliveira, em Charqueada de Baixo, Imbaú/PR. A proposta parte da realidade de uma escola do campo, onde educação, território e responsabilidade social caminham juntos.</p>
+            <p>Mais do que um espaço de aprendizagem, o colégio representa presença, cuidado e compromisso com a formação dos estudantes. A atuação dos professores e da equipe escolar fortalece uma educação próxima da comunidade, valorizando conhecimento, responsabilidade social e desenvolvimento local.</p>
+            <p>Por isso, o EcoChain não surge como uma operação oficial implantada, mas como uma simulação educativa conectada ao território, à escola pública, ao campo e ao cuidado com as pessoas.</p>
+          </div>
+          <aside class="escola-svg-wrap" aria-label="Ilustração vetorial inspirada na fachada do Colégio Estadual do Campo Terezinha Ladir de Oliveira">
+            <svg class="escola-svg" viewBox="0 0 620 420" role="img" aria-labelledby="titulo-svg-escola desc-svg-escola">
+              <title id="titulo-svg-escola">Ilustração estilizada de uma escola do campo</title>
+              <desc id="desc-svg-escola">Fachada vetorial autoral com prédio térreo, telhado inclinado, rampa acessível, guarda-corpo, árvore e céu aberto.</desc>
+              <defs>
+                <linearGradient id="ceuEscola" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#6db8ff" stop-opacity=".95" />
+                  <stop offset=".62" stop-color="#dff3ff" stop-opacity=".72" />
+                  <stop offset="1" stop-color="#eef8e8" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="paredeEscola" x1="0" x2="1">
+                  <stop offset="0" stop-color="#f5f7f1" />
+                  <stop offset="1" stop-color="#d9ded6" />
+                </linearGradient>
+                <linearGradient id="gramaEscola" x1="0" x2="1">
+                  <stop offset="0" stop-color="#d9f2c7" />
+                  <stop offset="1" stop-color="#7fb15a" />
+                </linearGradient>
+                <filter id="sombraEscola" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="14" stdDeviation="15" flood-color="#003e1b" flood-opacity=".18" />
+                </filter>
+              </defs>
+
+              <rect width="620" height="420" rx="32" fill="url(#ceuEscola)" />
+              <path d="M0 318C92 286 160 294 238 314c88 22 154 4 230-18 64-18 112-12 152 8v116H0Z" fill="url(#gramaEscola)" opacity=".88" />
+              <path d="M34 89c54-20 102-19 144 1M398 74c48-19 95-18 139 1M210 55c66-22 131-18 194 14" fill="none" stroke="#f5fbff" stroke-width="12" stroke-linecap="round" opacity=".82" />
+
+              <g class="svg-arvore" opacity=".96">
+                <path d="M116 311c10-62 8-117-8-165" fill="none" stroke="#3d5d31" stroke-width="12" stroke-linecap="round" />
+                <path d="M98 178c-54-15-72 34-43 62 26 25 79 10 84-29 42 16 84-9 82-45-2-47-72-56-98-16-5-31-40-45-66-28-31 21-22 62 41 56Z" fill="#3e6e36" />
+                <path d="M86 180c36 12 71 11 109-7M83 225c34-9 61-21 85-44" fill="none" stroke="#86b86b" stroke-width="5" stroke-linecap="round" opacity=".5" />
+              </g>
+
+              <g class="svg-escola-predio" filter="url(#sombraEscola)">
+                <path d="M206 144 378 108 572 148 548 171 377 139 226 169Z" fill="#2f342f" />
+                <path d="M206 169h342v116H206Z" fill="url(#paredeEscola)" />
+                <path d="M206 238h342v47H206Z" fill="#838a81" opacity=".72" />
+                <path d="M226 184h118v72H226Z" fill="#edf1ec" stroke="#c8d0c7" />
+                <path d="M382 182h72v103h-72Z" fill="#1f332a" />
+                <path d="M466 190h45v35h-45Z" fill="#e9eee8" stroke="#c5cec4" />
+                <circle cx="489" cy="207" r="12" fill="#6d7770" />
+                <path d="M244 199h82M244 217h82M244 235h82" stroke="#c8d0c7" stroke-width="3" />
+                <path d="M206 169 378 139 548 171" fill="none" stroke="#555c55" stroke-width="5" stroke-linejoin="round" />
+              </g>
+
+              <g class="svg-rampa">
+                <path d="M251 286 424 286 341 350 137 350Z" fill="#eee3cf" />
+                <path d="M145 348 345 348M170 328 374 328M198 308 399 308" stroke="#d6c8ae" stroke-width="3" opacity=".7" />
+                <path d="M151 292v53M189 282v63M227 276v67M265 272v68" stroke="#1e2f2a" stroke-width="5" stroke-linecap="round" />
+                <path d="M137 300c62-8 128-17 193-31M137 322c63-8 128-16 195-31" fill="none" stroke="#1e2f2a" stroke-width="5" stroke-linecap="round" />
+              </g>
+
+              <g class="svg-bicicleta" transform="translate(405 262)">
+                <circle cx="0" cy="26" r="18" fill="none" stroke="#26352e" stroke-width="5" />
+                <circle cx="58" cy="26" r="18" fill="none" stroke="#26352e" stroke-width="5" />
+                <path d="M0 26 23 1l19 25H0m42 0 16-25M23 1h25M23 1l-8-14" fill="none" stroke="#26352e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+
+              <g class="svg-folhas-topo" opacity=".88">
+                <path d="M345 21c38 12 48 36 29 73-31-14-39-40-29-73Z" fill="#78b957" />
+                <path d="M374 94c-2-31-11-53-29-73" fill="none" stroke="#356b34" stroke-width="4" stroke-linecap="round" />
+                <path d="M380 30c25 3 36 18 30 45-23-5-34-20-30-45Z" fill="#9bd86e" />
+              </g>
+            </svg>
+            <div class="escola-legenda">
+              <span>Escola estadual do campo</span>
+              <span>Charqueada de Baixo</span>
+              <span>Imbaú/PR</span>
+            </div>
+          </aside>
+        </article>
+
+        <article class="modal-cena modal-cena-final modal-cena-forte">
+          <figure>
+            <img src="assets/images/hero-planeta.png" alt="Planeta e folhas representando sustentabilidade e tecnologia">
+          </figure>
+          <p class="modal-numero">07</p>
+          <h3>Quando a escola olha para a comunidade, a tecnologia ganha propósito.</h3>
+          <p>O EcoChain é um projeto front-end, mas representa uma ideia concreta: usar tecnologia simples para organizar dados, reduzir desperdícios e equilibrar produção de alimentos com cuidado ambiental.</p>
+          <p class="fecho-institucional">Uma ideia simples para um problema urgente.</p>
         </article>
       </div>
     </section>
   </div>
+
+  <!-- =========================
+  DATALISTS DE QUALIDADE DE DADOS
+  Estas listas oferecem sugestões sem bloquear a digitação livre.
+  O JavaScript preenche opções iniciais e valores já cadastrados,
+  ajudando a evitar duplicidades como "Centro" e "centro".
+  ========================== -->
+  <datalist id="lista-cidades"></datalist>
+  <datalist id="lista-bairros"></datalist>
+  <datalist id="lista-alimentos"></datalist>
+  <datalist id="lista-nomes-doadores"></datalist>
+  <datalist id="lista-nomes-destinos"></datalist>
+  <datalist id="lista-tipos-personalizados"></datalist>
 
   <footer class="rodape">
     <div class="rodape-conteudo">

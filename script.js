@@ -26,6 +26,32 @@ let idDoadorAtivo = null;
 /* Contador simples usado para criar identificadores únicos durante a sessão. */
 let proximoId = 1;
 
+/*
+  Sugestões iniciais usadas pelos campos com datalist.
+  O usuário continua livre para digitar algo novo, mas estes exemplos
+  orientam a escrita e ajudam a evitar duplicidades no relatório.
+*/
+const sugestoesIniciais = {
+  cidades: ["Telêmaco Borba", "Imbaú", "Tibagi", "Ortigueira", "Londrina", "Curitiba"],
+  bairros: ["Centro", "Vila Verde", "Jardim Alegre", "Área Rural", "Distrito Industrial"],
+  alimentos: ["Arroz", "Feijão", "Leite", "Banana", "Maçã", "Laranja", "Alface", "Tomate", "Batata", "Cenoura", "Pão francês", "Pão de forma", "Bolo simples", "Iogurte", "Queijo", "Frango", "Carne bovina", "Linguiça", "Marmita", "Sopa pronta", "Arroz com frango", "Macarrão", "Farinha de trigo", "Óleo de soja"],
+  tiposPersonalizados: ["Feira livre", "Produtor rural", "Mercado local", "Associação", "Cozinha comunitária", "Banco de alimentos", "Escola", "Projeto social"]
+};
+
+/*
+  Mapa didático de alimentos conhecidos.
+  Ele não impede alimentos novos, mas ajuda a manter coerência quando o
+  sistema reconhece um item comum. Ex.: Laranja deve entrar como Hortifruti.
+*/
+const alimentosConhecidosPorCategoria = {
+  Hortifruti: ["Laranja", "Banana", "Maçã", "Alface", "Tomate", "Batata", "Cenoura", "Verduras", "Legumes"],
+  Padaria: ["Pão", "Pão francês", "Pão de forma", "Bolo simples"],
+  Laticínios: ["Leite", "Iogurte", "Queijo"],
+  Carnes: ["Frango", "Carne bovina", "Linguiça"],
+  "Refeições prontas": ["Marmita", "Sopa pronta", "Arroz com frango"],
+  Mercearia: ["Arroz", "Feijão", "Macarrão", "Farinha de trigo", "Óleo de soja"]
+};
+
 /* =========================================================
    2. REFERÊNCIAS DOS ELEMENTOS DO HTML
    Centralizar essas referências deixa as funções menores e mais claras.
@@ -49,17 +75,34 @@ const campoOutroTipoDestino = document.querySelector("[data-campo-outro-destino]
 const inputOutroTipoDestino = document.querySelector("#outro-tipo-destino");
 
 const formularioDoacao = document.querySelector("#form-doacao");
+const inputAlimento = document.querySelector("#alimento");
+const seletorCategoria = document.querySelector("#categoria");
 const listaDoacoes = document.querySelector("[data-lista-doacoes]");
+const listaDoacoesPendentes = document.querySelector("[data-lista-doacoes-pendentes]");
 const totalItens = document.querySelector("[data-total-itens]");
+const totalPendentes = document.querySelector("[data-total-pendentes]");
 const botaoProcessar = document.querySelector("[data-processar]");
 const painelResultado = document.querySelector("[data-resultado]");
 const historico = document.querySelector("[data-historico]");
 const avisoDoador = document.querySelector("[data-aviso-doador]");
+const avisoCategoria = document.querySelector("[data-aviso-categoria]");
+const botaoDemo = document.querySelector("[data-demo-toggle]");
+
+/* Elementos datalist usados para sugerir escrita padronizada sem bloquear novos valores. */
+const datalists = {
+  cidades: document.querySelector("#lista-cidades"),
+  bairros: document.querySelector("#lista-bairros"),
+  alimentos: document.querySelector("#lista-alimentos"),
+  nomesDoadores: document.querySelector("#lista-nomes-doadores"),
+  nomesDestinos: document.querySelector("#lista-nomes-destinos"),
+  tiposPersonalizados: document.querySelector("#lista-tipos-personalizados")
+};
 
 /* Elementos do modal informativo aberto pelo botão "Saiba mais". */
 const modalSaibaMais = document.querySelector("[data-modal-saiba-mais]");
 const botoesAbrirModal = [...document.querySelectorAll("[data-abrir-modal]")];
 const botaoFecharModal = document.querySelector("[data-fechar-modal]");
+const barraProgressoModal = document.querySelector("[data-modal-progresso]");
 
 /* Elementos do dashboard atualizados a partir dos arrays da sessão. */
 const graficoPrioridades = document.querySelector("[data-grafico-prioridades]");
@@ -71,6 +114,15 @@ const totalCidades = document.querySelector("[data-total-cidades]");
 const totalBairros = document.querySelector("[data-total-bairros]");
 const listaCidades = document.querySelector("[data-lista-cidades]");
 const listaBairros = document.querySelector("[data-lista-bairros]");
+const listaLocalidadesDetalhadas = document.querySelector("[data-localidades-detalhadas]");
+const relatorioVazio = document.querySelector("[data-relatorio-vazio]");
+
+/* Elementos do modal de filtro por prioridade, separado do "Saiba mais". */
+const modalFiltro = document.querySelector("[data-modal-filtro]");
+const botaoFecharModalFiltro = document.querySelector("[data-fechar-modal-filtro]");
+const tituloFiltroPrioridade = document.querySelector("[data-titulo-filtro-prioridade]");
+const contagemFiltroPrioridade = document.querySelector("[data-contagem-filtro-prioridade]");
+const listaFiltroPrioridade = document.querySelector("[data-lista-filtro-prioridade]");
 
 /* Elementos do carrossel que já existia na página inicial. */
 const slides = [...document.querySelectorAll(".slide")];
@@ -81,6 +133,7 @@ const carrossel = document.querySelector(".carrossel");
 
 let slideAtual = 0;
 let intervaloCarrossel;
+let demonstracaoAtiva = false;
 
 /* =========================================================
    3. FUNÇÕES AUXILIARES
@@ -125,8 +178,163 @@ function formatarPrazoVencimento(dias) {
 }
 
 /* Remove espaços extras antes de comparar cidades, bairros e categorias. */
+function limparEspacosTexto(texto) {
+  return String(texto || "").trim().replace(/\s+/g, " ");
+}
+
+/*
+  Cria uma chave de comparação para textos digitáveis.
+  A chave ignora maiúsculas, minúsculas, acentos e espaços duplicados.
+  Ex.: "Telêmaco Borba", "telemaco borba" e "TELEMACO   BORBA"
+  passam a ser entendidos como o mesmo valor.
+*/
+function normalizarChaveTexto(texto) {
+  return limparEspacosTexto(texto)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR");
+}
+
+/*
+  Mantém o nome da função já usada no projeto, mas melhora sua regra.
+  Assim o algoritmo de proximidade e o painel de localidades também
+  passam a comparar cidade/bairro sem diferenciar acentos.
+*/
 function normalizarTexto(texto) {
-  return String(texto).trim().toLocaleLowerCase("pt-BR");
+  return normalizarChaveTexto(texto);
+}
+
+/*
+  Procura um alimento dentro do mapa de alimentos conhecidos.
+  A comparação ignora acentos, maiúsculas/minúsculas e espaços extras.
+*/
+function obterCategoriaConhecida(alimentoDigitado) {
+  const chaveAlimento = normalizarChaveTexto(alimentoDigitado);
+
+  if (!chaveAlimento) return null;
+
+  for (const [categoria, alimentos] of Object.entries(alimentosConhecidosPorCategoria)) {
+    const alimentoEncontrado = alimentos.find((alimento) => normalizarChaveTexto(alimento) === chaveAlimento);
+
+    if (alimentoEncontrado) {
+      return { alimento: alimentoEncontrado, categoria };
+    }
+  }
+
+  return null;
+}
+
+/* Mostra uma mensagem curta e discreta abaixo do campo de categoria. */
+function exibirAvisoCategoria(mensagem) {
+  if (!avisoCategoria) return;
+
+  avisoCategoria.textContent = mensagem;
+  avisoCategoria.hidden = false;
+}
+
+/* Remove o aviso quando não há correção ou orientação necessária. */
+function ocultarAvisoCategoria() {
+  if (!avisoCategoria) return;
+
+  avisoCategoria.textContent = "";
+  avisoCategoria.hidden = true;
+}
+
+/*
+  Garante coerência entre alimento e categoria.
+  Se o alimento for conhecido e a categoria estiver errada, o sistema
+  corrige automaticamente e explica o motivo ao usuário.
+*/
+function validarCategoriaDaDoacao(alimento, categoriaEscolhida) {
+  const alimentoConhecido = obterCategoriaConhecida(alimento);
+
+  if (!alimentoConhecido) {
+    ocultarAvisoCategoria();
+    return categoriaEscolhida;
+  }
+
+  if (!categoriaEscolhida || categoriaEscolhida !== alimentoConhecido.categoria) {
+    if (seletorCategoria) seletorCategoria.value = alimentoConhecido.categoria;
+    exibirAvisoCategoria(`Categoria ajustada: o item ${alimentoConhecido.alimento} deve ser cadastrado como ${alimentoConhecido.categoria}.`);
+    return alimentoConhecido.categoria;
+  }
+
+  ocultarAvisoCategoria();
+  return categoriaEscolhida;
+}
+
+/*
+  Unifica tipos equivalentes para não fragmentar relatório e gráfico.
+  Mercado, Supermercado e Hipermercado passam a contar como "Mercado".
+*/
+function normalizarTipoDoador(tipo) {
+  const tipoLimpo = limparEspacosTexto(tipo);
+  const chaveTipo = normalizarChaveTexto(tipoLimpo);
+
+  if (["mercado", "supermercado", "hipermercado"].includes(chaveTipo)) {
+    return "Mercado";
+  }
+
+  return tipoLimpo;
+}
+
+/*
+  Formata valores novos em estilo título para campos onde isso faz sentido.
+  Palavras pequenas permanecem minúsculas no meio do texto para soar natural.
+  Ex.: "jardim primavera" -> "Jardim Primavera".
+*/
+function formatarTextoTitulo(texto) {
+  const palavrasMinusculas = ["da", "de", "do", "das", "dos", "e"];
+
+  return limparEspacosTexto(texto)
+    .toLocaleLowerCase("pt-BR")
+    .split(" ")
+    .map((palavra, indice) => {
+      if (indice > 0 && palavrasMinusculas.includes(palavra)) return palavra;
+      return palavra.charAt(0).toLocaleUpperCase("pt-BR") + palavra.slice(1);
+    })
+    .join(" ");
+}
+
+/*
+  Busca se o valor digitado equivale a algo que já existe.
+  Quando encontra, retorna a versão mais bonita já cadastrada ou sugerida.
+*/
+function encontrarValorEquivalente(valorDigitado, listaExistente) {
+  const chaveDigitada = normalizarChaveTexto(valorDigitado);
+
+  if (!chaveDigitada) return "";
+
+  return listaExistente.find((valor) => normalizarChaveTexto(valor) === chaveDigitada) || "";
+}
+
+/*
+  Ordenação usada apenas na renderização visual das listas.
+  O array original permanece intacto, preservando a lógica do sistema.
+*/
+function ordenarMaisRecentesPrimeiro(itens) {
+  return [...itens].sort((itemA, itemB) => itemB.id - itemA.id);
+}
+
+/*
+  Padroniza campos de alto impacto: cidade, bairro, alimento e tipos "Outro".
+  Primeiro tenta reaproveitar uma escrita conhecida; se for algo novo,
+  salva em estilo título para manter relatórios e gráficos mais limpos.
+*/
+function padronizarValorDigitado(valorDigitado, listaExistente = []) {
+  const valorLimpo = limparEspacosTexto(valorDigitado);
+  const equivalente = encontrarValorEquivalente(valorLimpo, listaExistente);
+
+  return equivalente || formatarTextoTitulo(valorLimpo);
+}
+
+/*
+  Para nomes comerciais, a padronização é leve.
+  Não substituímos automaticamente por outro nome parecido, pois
+  "Mercado São José" e "Mercado São José Centro" podem ser lugares diferentes.
+*/
+function padronizarNomeComercial(valorDigitado) {
+  return limparEspacosTexto(valorDigitado);
 }
 
 /* Impede que um texto digitado pelo usuário seja interpretado como HTML. */
@@ -161,10 +369,64 @@ function obterLocalidadesUnicas(campo) {
 
   [...doadores, ...pontosDestino].forEach((registro) => {
     if (!registro[campo]) return;
-    localidades.set(normalizarTexto(registro[campo]), registro[campo].trim());
+    const chave = normalizarTexto(registro[campo]);
+    if (!localidades.has(chave)) localidades.set(chave, limparEspacosTexto(registro[campo]));
   });
 
   return [...localidades.values()].sort((textoA, textoB) => textoA.localeCompare(textoB, "pt-BR"));
+}
+
+/*
+  Junta listas sem duplicar valores equivalentes.
+  Isso alimenta os datalists com exemplos iniciais e registros reais,
+  mantendo apenas uma opção visual para "Centro", "centro" e variações.
+*/
+function combinarSugestoes(...listas) {
+  const sugestoes = new Map();
+
+  listas.flat().forEach((valor) => {
+    const valorLimpo = limparEspacosTexto(valor);
+    const chave = normalizarChaveTexto(valorLimpo);
+
+    if (chave && !sugestoes.has(chave)) {
+      sugestoes.set(chave, valorLimpo);
+    }
+  });
+
+  return [...sugestoes.values()].sort((textoA, textoB) => textoA.localeCompare(textoB, "pt-BR"));
+}
+
+/* Escreve as opções dentro de um datalist específico. */
+function preencherDatalist(elemento, opcoes) {
+  if (!elemento) return;
+
+  elemento.innerHTML = opcoes
+    .map((opcao) => `<option value="${escaparHTML(opcao)}"></option>`)
+    .join("");
+}
+
+/*
+  Atualiza todas as sugestões com base nos arrays atuais.
+  A chamada acontece após cadastros e remoções para manter os campos
+  sempre aprendendo com o que o usuário registrou na sessão.
+*/
+function atualizarDatalists() {
+  const cidadesCadastradas = obterLocalidadesUnicas("cidade");
+  const bairrosCadastrados = obterLocalidadesUnicas("bairro");
+  const alimentosCadastrados = doacoes.map((doacao) => doacao.alimento);
+  const nomesDoadores = doadores.map((doador) => doador.nome);
+  const nomesDestinos = pontosDestino.map((destino) => destino.nome);
+  const tiposPersonalizados = [
+    ...doadores.map((doador) => doador.tipo),
+    ...pontosDestino.map((destino) => destino.tipo)
+  ];
+
+  preencherDatalist(datalists.cidades, combinarSugestoes(sugestoesIniciais.cidades, cidadesCadastradas));
+  preencherDatalist(datalists.bairros, combinarSugestoes(sugestoesIniciais.bairros, bairrosCadastrados));
+  preencherDatalist(datalists.alimentos, combinarSugestoes(sugestoesIniciais.alimentos, alimentosCadastrados));
+  preencherDatalist(datalists.nomesDoadores, combinarSugestoes(nomesDoadores));
+  preencherDatalist(datalists.nomesDestinos, combinarSugestoes(nomesDestinos));
+  preencherDatalist(datalists.tiposPersonalizados, combinarSugestoes(sugestoesIniciais.tiposPersonalizados, tiposPersonalizados));
 }
 
 /* =========================================================
@@ -280,6 +542,8 @@ carrossel.addEventListener("mouseleave", iniciarRotacaoCarrossel);
 function abrirModalSaibaMais() {
   modalSaibaMais.hidden = false;
   document.body.classList.add("modal-aberto");
+  modalSaibaMais.querySelector(".modal-saiba-mais").scrollTop = 0;
+  atualizarProgressoModal();
   botaoFecharModal.focus();
 }
 
@@ -303,16 +567,37 @@ modalSaibaMais.addEventListener("click", (evento) => {
 
 document.addEventListener("keydown", (evento) => {
   if (evento.key === "Escape" && !modalSaibaMais.hidden) fecharModalSaibaMais();
+  if (evento.key === "Escape" && modalFiltro && !modalFiltro.hidden) fecharModalFiltroPrioridade();
 });
 
 /*
-  O botão final do modal encerra a apresentação e leva o usuário
-  diretamente para a aba onde a redistribuição é simulada.
+  Atualiza uma barra discreta no topo do modal.
+  Ela ajuda o visitante a perceber que está percorrendo uma jornada
+  de apresentação, sem criar uma navegação complexa.
 */
-document.querySelector("[data-modal-ir-doacao]").addEventListener("click", () => {
-  fecharModalSaibaMais();
-  exibirAba("doacao");
-});
+function atualizarProgressoModal() {
+  const corpoModal = modalSaibaMais.querySelector(".modal-saiba-mais");
+  const areaRolavel = corpoModal.scrollHeight - corpoModal.clientHeight;
+  const progresso = areaRolavel > 0 ? corpoModal.scrollTop / areaRolavel * 100 : 0;
+
+  barraProgressoModal.style.width = `${progresso}%`;
+}
+
+modalSaibaMais.querySelector(".modal-saiba-mais").addEventListener("scroll", atualizarProgressoModal);
+
+/*
+  Algumas versões do modal podem ter um CTA final para a aba Doação.
+  A verificação condicional evita erro quando o fechamento é apenas
+  institucional, como na versão atual da apresentação.
+*/
+const botaoModalIrDoacao = document.querySelector("[data-modal-ir-doacao]");
+
+if (botaoModalIrDoacao) {
+  botaoModalIrDoacao.addEventListener("click", () => {
+    fecharModalSaibaMais();
+    exibirAba("doacao");
+  });
+}
 
 /* =========================================================
    7. CADASTRO E SELEÇÃO DE DOADORES
@@ -343,16 +628,23 @@ formularioDoador.addEventListener("submit", (evento) => {
 
   const dados = new FormData(formularioDoador);
   const tipoSelecionado = dados.get("tipoDoador");
+  const cidadesConhecidas = combinarSugestoes(sugestoesIniciais.cidades, obterLocalidadesUnicas("cidade"));
+  const bairrosConhecidos = combinarSugestoes(sugestoesIniciais.bairros, obterLocalidadesUnicas("bairro"));
+  const tiposConhecidos = combinarSugestoes(
+    sugestoesIniciais.tiposPersonalizados,
+    doadores.map((doador) => doador.tipo),
+    pontosDestino.map((destino) => destino.tipo)
+  );
   const novoDoador = {
     id: gerarId(),
-    nome: dados.get("nomeDoador").trim(),
-    tipo: tipoSelecionado === "Outro" ? dados.get("outroTipoDoador").trim() : tipoSelecionado,
+    nome: padronizarNomeComercial(dados.get("nomeDoador")),
+    tipo: normalizarTipoDoador(tipoSelecionado === "Outro" ? padronizarValorDigitado(dados.get("outroTipoDoador"), tiposConhecidos) : tipoSelecionado),
     nomeResponsavel: dados.get("nomeResponsavel").trim(),
     sobrenomeResponsavel: dados.get("sobrenomeResponsavel").trim(),
     telefone: formatarTelefone(dados.get("telefoneDoador")),
     email: dados.get("emailDoador").trim(),
-    cidade: dados.get("cidadeDoador").trim(),
-    bairro: dados.get("bairroDoador").trim()
+    cidade: padronizarValorDigitado(dados.get("cidadeDoador"), cidadesConhecidas),
+    bairro: padronizarValorDigitado(dados.get("bairroDoador"), bairrosConhecidos)
   };
 
   doadores.push(novoDoador);
@@ -399,7 +691,7 @@ function atualizarListaDoadores() {
     return;
   }
 
-  listaDoadores.innerHTML = doadores.map((doador) => {
+  listaDoadores.innerHTML = ordenarMaisRecentesPrimeiro(doadores).map((doador) => {
     const ativo = doador.id === idDoadorAtivo;
 
     return `
@@ -464,12 +756,19 @@ formularioDestino.addEventListener("submit", (evento) => {
 
   const dados = new FormData(formularioDestino);
   const tipoSelecionado = dados.get("tipoDestino");
+  const cidadesConhecidas = combinarSugestoes(sugestoesIniciais.cidades, obterLocalidadesUnicas("cidade"));
+  const bairrosConhecidos = combinarSugestoes(sugestoesIniciais.bairros, obterLocalidadesUnicas("bairro"));
+  const tiposConhecidos = combinarSugestoes(
+    sugestoesIniciais.tiposPersonalizados,
+    doadores.map((doador) => doador.tipo),
+    pontosDestino.map((destino) => destino.tipo)
+  );
   const novoDestino = {
     id: gerarId(),
-    nome: dados.get("nomeDestino").trim(),
-    tipo: tipoSelecionado === "Outro" ? dados.get("outroTipoDestino").trim() : tipoSelecionado,
-    cidade: dados.get("cidadeDestino").trim(),
-    bairro: dados.get("bairroDestino").trim(),
+    nome: padronizarNomeComercial(dados.get("nomeDestino")),
+    tipo: tipoSelecionado === "Outro" ? padronizarValorDigitado(dados.get("outroTipoDestino"), tiposConhecidos) : tipoSelecionado,
+    cidade: padronizarValorDigitado(dados.get("cidadeDestino"), cidadesConhecidas),
+    bairro: padronizarValorDigitado(dados.get("bairroDestino"), bairrosConhecidos),
     pessoasAtendidas: Number(dados.get("pessoasDestino")),
     refeicoesPorDia: Number(dados.get("refeicoesDestino"))
   };
@@ -503,7 +802,7 @@ function atualizarListaDestinos() {
     return;
   }
 
-  listaDestinos.innerHTML = pontosDestino.map((destino) => `
+  listaDestinos.innerHTML = ordenarMaisRecentesPrimeiro(pontosDestino).map((destino) => `
     <article class="card-cadastro">
       <span class="selo-cadastro">${escaparHTML(destino.tipo)}</span>
       <h3>${escaparHTML(destino.nome)}</h3>
@@ -719,6 +1018,18 @@ function sugerirDestino(doacao) {
    13. CADASTRO DE ALIMENTOS
    O doador não é digitado manualmente: vem do parceiro ativo.
 ========================================================= */
+/* Ao digitar alimento ou trocar categoria, a plataforma tenta corrigir
+   inconsistências conhecidas sem bloquear alimentos novos. */
+if (inputAlimento && seletorCategoria) {
+  inputAlimento.addEventListener("input", () => {
+    validarCategoriaDaDoacao(inputAlimento.value, seletorCategoria.value);
+  });
+
+  seletorCategoria.addEventListener("change", () => {
+    validarCategoriaDaDoacao(inputAlimento.value, seletorCategoria.value);
+  });
+}
+
 formularioDoacao.addEventListener("submit", (evento) => {
   evento.preventDefault();
 
@@ -731,11 +1042,14 @@ formularioDoacao.addEventListener("submit", (evento) => {
 
   const dados = new FormData(formularioDoacao);
   const dataVencimento = dados.get("validade");
+  const alimentosConhecidos = combinarSugestoes(sugestoesIniciais.alimentos, doacoes.map((doacao) => doacao.alimento));
+  const alimentoPadronizado = padronizarValorDigitado(dados.get("alimento"), alimentosConhecidos);
+  const categoriaValidada = validarCategoriaDaDoacao(alimentoPadronizado, dados.get("categoria"));
 
   doacoes.push({
     id: gerarId(),
-    alimento: dados.get("alimento").trim(),
-    categoria: dados.get("categoria"),
+    alimento: alimentoPadronizado,
+    categoria: categoriaValidada,
     quantidade: Number(dados.get("quantidade")),
     dataVencimento,
     diasRestantes: calcularDiasAteVencimento(dataVencimento),
@@ -752,6 +1066,7 @@ formularioDoacao.addEventListener("submit", (evento) => {
   });
 
   formularioDoacao.reset();
+  ocultarAvisoCategoria();
   atualizarInterfaceCompleta();
 });
 
@@ -769,7 +1084,7 @@ function removerDoacao(id) {
    14. PROCESSAMENTO DA REDISTRIBUIÇÃO
    Percorre todos os alimentos e aplica prioridade e destino.
 ========================================================= */
-botaoProcessar.addEventListener("click", () => {
+function processarRedistribuicao() {
   doacoes.forEach((doacao) => {
     const prioridade = calcularPrioridade(doacao);
 
@@ -787,15 +1102,302 @@ botaoProcessar.addEventListener("click", () => {
   });
 
   atualizarInterfaceCompleta();
-});
+}
+
+botaoProcessar.addEventListener("click", processarRedistribuicao);
+
+/* =========================================================
+   15. DEMONSTRAÇÃO PELO SÍMBOLO DA MARCA
+   O controle fica no símbolo corrente + folha.
+   Como não há banco de dados, limpar a demonstração zera
+   somente os arrays em memória da sessão atual.
+========================================================= */
+function obterDataDemo(diasAteVencimento) {
+  const data = new Date();
+  data.setDate(data.getDate() + diasAteVencimento);
+  return data.toISOString().slice(0, 10);
+}
+
+function atualizarEstadoVisualDemonstracao() {
+  if (!botaoDemo) return;
+
+  botaoDemo.classList.toggle("demo-ativa", demonstracaoAtiva);
+  botaoDemo.classList.toggle("demo-inativa", !demonstracaoAtiva);
+
+  const textoAcao = demonstracaoAtiva ? "Limpar demonstração" : "Ativar demonstração";
+  botaoDemo.setAttribute("aria-label", textoAcao);
+  botaoDemo.setAttribute("title", textoAcao);
+}
+
+function animarSimboloDemonstracao() {
+  if (!botaoDemo) return;
+
+  botaoDemo.classList.remove("demo-pulso");
+  void botaoDemo.offsetWidth;
+  botaoDemo.classList.add("demo-pulso");
+}
+
+function limparDadosDemonstracao() {
+  doadores.splice(0, doadores.length);
+  pontosDestino.splice(0, pontosDestino.length);
+  doacoes.splice(0, doacoes.length);
+
+  idDoadorAtivo = null;
+  proximoId = 1;
+  demonstracaoAtiva = false;
+
+  formularioDoador.reset();
+  formularioDestino.reset();
+  formularioDoacao.reset();
+  atualizarCampoOutroDoador();
+  atualizarCampoOutroDestino();
+  atualizarEstadoVisualDemonstracao();
+  atualizarInterfaceCompleta();
+  animarSimboloDemonstracao();
+}
+
+function carregarDadosDemonstracao() {
+  limparDadosDemonstracao();
+
+  /*
+    Base territorial da demonstração.
+    As cidades e bairros se repetem para o algoritmo conseguir simular
+    proximidade: mesmo bairro, mesma cidade ou cidade diferente.
+  */
+  const cidadesDemo = ["Telêmaco Borba", "Imbaú", "Tibagi", "Ortigueira", "Londrina", "Curitiba"];
+  const bairrosDemo = ["Centro", "Área Rural", "Vila Verde", "Jardim Alegre", "Distrito Industrial"];
+  const tiposDoadoresDemo = ["Mercado", "Supermercado", "Padaria", "Restaurante", "Produtor rural", "Feirante", "Escola", "Igreja", "Empresa", "Cooperativa"];
+  const nomesDoadoresDemo = [
+    "Mercado Boa Safra",
+    "Padaria Pão da Vila",
+    "Feira Verde",
+    "Sítio Esperança",
+    "Restaurante Sabor Caseiro",
+    "Cooperativa Campo Vivo",
+    "Supermercado Nova Colheita",
+    "Produtor Vale Verde",
+    "Escola Raízes do Campo",
+    "Igreja São Francisco",
+    "Empresa Alimento Certo",
+    "Mercado Sol da Manhã",
+    "Padaria Trigo Bom",
+    "Feira da Comunidade",
+    "Sítio Bela Terra",
+    "Restaurante Tempero da Casa",
+    "Cooperativa Rota Rural",
+    "Supermercado União",
+    "Produtor Água Clara",
+    "Igreja Mãos Unidas",
+    "Empresa Mesa Cheia",
+    "Mercado Caminho Verde",
+    "Padaria Forno Amigo",
+    "Feira Campo Aberto"
+  ];
+  const responsaveisDemo = [
+    ["Ana", "Souza"], ["Carlos", "Lima"], ["Marina", "Oliveira"], ["João", "Ferreira"],
+    ["Paula", "Mendes"], ["Rafael", "Almeida"], ["Bianca", "Ribeiro"], ["Sérgio", "Costa"],
+    ["Luana", "Martins"], ["Mateus", "Rocha"], ["Helena", "Barbosa"], ["Diego", "Pereira"],
+    ["Renata", "Gomes"], ["Bruno", "Azevedo"], ["Camila", "Nunes"], ["Eduardo", "Cardoso"],
+    ["Isabela", "Teixeira"], ["André", "Moura"], ["Patrícia", "Campos"], ["Felipe", "Dias"],
+    ["Clara", "Moreira"], ["Vitor", "Freitas"], ["Juliana", "Santos"], ["Marcelo", "Vieira"]
+  ];
+
+  /*
+    Cadastro automático de 24 doadores: quatro instituições por cidade.
+    O primeiro parceiro vira doador ativo para a aba Doação já funcionar.
+  */
+  const doadoresDemoCriados = nomesDoadoresDemo.map((nome, indice) => {
+    const cidade = cidadesDemo[Math.floor(indice / 4)];
+    const bairro = bairrosDemo[indice % bairrosDemo.length];
+    const [nomeResponsavel, sobrenomeResponsavel] = responsaveisDemo[indice];
+    const doador = {
+      id: gerarId(),
+      nome,
+      tipo: normalizarTipoDoador(tiposDoadoresDemo[indice % tiposDoadoresDemo.length]),
+      nomeResponsavel,
+      sobrenomeResponsavel,
+      telefone: formatarTelefone(`43${9}${String(88000000 + indice * 137).slice(0, 8)}`),
+      email: `${normalizarChaveTexto(nome).replace(/\s+/g, ".")}@demo.ecochain`,
+      cidade,
+      bairro
+    };
+
+    doadores.push(doador);
+    return doador;
+  });
+
+  idDoadorAtivo = doadoresDemoCriados[0].id;
+
+  /*
+    Pontos de destino usados pelo algoritmo.
+    Há dois ou três por cidade, com capacidades diferentes para o painel
+    conseguir demonstrar escolhas por proximidade e estrutura.
+  */
+  const pontosDestinoDemo = [
+    ["Escola Municipal Rio Verde", "Escola", "Telêmaco Borba", "Centro", 320, 410],
+    ["Igreja São José", "Igreja", "Telêmaco Borba", "Vila Verde", 140, 95],
+    ["Banco de Alimentos Campos Gerais", "Banco de alimentos", "Telêmaco Borba", "Distrito Industrial", 520, 260],
+    ["Cozinha Comunitária Esperança", "Cozinha comunitária", "Imbaú", "Centro", 180, 240],
+    ["Associação Mãos do Campo", "Associação", "Imbaú", "Área Rural", 115, 85],
+    ["Projeto Social Ponte Verde", "Projeto social", "Tibagi", "Jardim Alegre", 210, 190],
+    ["Comunidade Rural São Bento", "Comunidade rural", "Tibagi", "Área Rural", 96, 70],
+    ["Escola Municipal Água Clara", "Escola", "Tibagi", "Centro", 280, 330],
+    ["Banco de Alimentos Caminho Verde", "Banco de alimentos", "Ortigueira", "Distrito Industrial", 430, 210],
+    ["Igreja Mãos Unidas", "Igreja", "Ortigueira", "Vila Verde", 160, 120],
+    ["Cozinha Comunitária Novo Amanhã", "Cozinha comunitária", "Londrina", "Centro", 360, 520],
+    ["Associação Vila Viva", "Associação", "Londrina", "Jardim Alegre", 240, 180],
+    ["Escola Popular Jardim Norte", "Escola", "Londrina", "Vila Verde", 410, 460],
+    ["Projeto Social Mesa Aberta", "Projeto social", "Curitiba", "Centro", 390, 480],
+    ["Banco de Alimentos Capital", "Banco de alimentos", "Curitiba", "Distrito Industrial", 680, 360]
+  ];
+
+  pontosDestinoDemo.forEach(([nome, tipo, cidade, bairro, pessoasAtendidas, refeicoesPorDia]) => {
+    pontosDestino.push({
+      id: gerarId(),
+      nome,
+      tipo,
+      cidade,
+      bairro,
+      pessoasAtendidas,
+      refeicoesPorDia
+    });
+  });
+
+  /*
+    Lista com 54 doações simuladas.
+    As datas são relativas ao dia atual para a apresentação nunca ficar
+    desatualizada: existem itens expirados, vencendo hoje e com prazos longos.
+  */
+  const alimentosDemo = [
+    ["Laranja", "Hortifruti"], ["Banana", "Hortifruti"], ["Maçã", "Hortifruti"],
+    ["Alface", "Hortifruti"], ["Tomate", "Hortifruti"], ["Batata", "Hortifruti"],
+    ["Cenoura", "Hortifruti"], ["Pão francês", "Padaria"], ["Pão de forma", "Padaria"],
+    ["Bolo simples", "Padaria"], ["Leite", "Laticínios"], ["Iogurte", "Laticínios"],
+    ["Queijo", "Laticínios"], ["Frango", "Carnes"], ["Carne bovina", "Carnes"],
+    ["Linguiça", "Carnes"], ["Marmita", "Refeições prontas"], ["Sopa pronta", "Refeições prontas"],
+    ["Arroz com frango", "Refeições prontas"], ["Arroz", "Mercearia"], ["Feijão", "Mercearia"],
+    ["Macarrão", "Mercearia"], ["Farinha de trigo", "Mercearia"], ["Óleo de soja", "Mercearia"]
+  ];
+  const prazosDemo = [-3, -1, 0, 1, 2, 3, 5, 7, 10, 15, 30, 1, 4, 6, 2, 0, 12, 5];
+  const quantidadesDemo = [4, 6, 8, 12, 18, 24, 32, 45, 60, 75, 5, 14, 22, 36, 58, 7, 16, 28];
+  const doacoesDemo = Array.from({ length: 54 }, (_, indice) => {
+    const [alimento, categoria] = alimentosDemo[indice % alimentosDemo.length];
+    const doador = doadoresDemoCriados[indice % doadoresDemoCriados.length];
+
+    return {
+      alimento,
+      categoria,
+      quantidade: quantidadesDemo[(indice + Math.floor(indice / 6)) % quantidadesDemo.length],
+      dias: prazosDemo[(indice + Math.floor(indice / 9)) % prazosDemo.length],
+      doadorId: doador.id,
+      doadorNome: doador.nome
+    };
+  });
+
+  doacoesDemo.forEach((item) => {
+    const dataVencimento = obterDataDemo(item.dias);
+
+    doacoes.push({
+      id: gerarId(),
+      alimento: item.alimento,
+      categoria: item.categoria,
+      quantidade: item.quantidade,
+      dataVencimento,
+      diasRestantes: calcularDiasAteVencimento(dataVencimento),
+      doadorId: item.doadorId,
+      doadorNome: item.doadorNome,
+      processada: false,
+      prioridade: "",
+      classePrioridade: "",
+      justificativa: "",
+      destino: "",
+      destinoId: null,
+      destinoPadrao: false,
+      motivoDestino: ""
+    });
+  });
+
+  demonstracaoAtiva = true;
+  atualizarEstadoVisualDemonstracao();
+  processarRedistribuicao();
+  animarSimboloDemonstracao();
+}
+
+function alternarDemonstracao() {
+  if (demonstracaoAtiva) {
+    limparDadosDemonstracao();
+    return;
+  }
+
+  carregarDadosDemonstracao();
+}
+
+if (botaoDemo) {
+  botaoDemo.addEventListener("click", alternarDemonstracao);
+}
 
 /* =========================================================
    15. LISTA VISUAL DE DOAÇÕES
    Exibe validade, dias calculados, prioridade, justificativa e destino.
 ========================================================= */
+/* Monta um card de doação reutilizado nas listas de pendentes e cadastradas. */
+function montarCardDoacao(doacao, opcoes = {}) {
+  const prioridade = doacao.processada
+    ? `<span class="selo-prioridade ${doacao.classePrioridade}">${doacao.prioridade}</span>`
+    : `<span class="selo-prioridade">Aguardando processamento</span>`;
+
+  const destino = doacao.processada ? escaparHTML(doacao.destino) : "Será definido automaticamente";
+  const avisoDestino = doacao.destinoPadrao && doacao.processada
+    ? `<span class="aviso-destino-padrao">Sugestão padrão</span>`
+    : "";
+  const classeCompacta = opcoes.compacto ? "item-doacao-pendente" : "";
+
+  return `
+    <article class="item-doacao ${classeCompacta}">
+      <div>
+        <h3>${escaparHTML(doacao.alimento)}</h3>
+        <p>${escaparHTML(doacao.categoria)}</p>
+      </div>
+      <div>
+        <strong>${formatarNumero(doacao.quantidade)} kg</strong>
+        <span>${escaparHTML(doacao.doadorNome)}</span>
+      </div>
+      <div>
+        <strong>${formatarData(doacao.dataVencimento)}</strong>
+        <span>${formatarPrazoVencimento(doacao.diasRestantes)}</span>
+      </div>
+      <div>
+        ${prioridade}
+      </div>
+      <div class="item-doacao-destino">
+        <strong>${destino}</strong>
+        ${avisoDestino}
+        ${doacao.processada ? `<p class="item-doacao-justificativa">${escaparHTML(doacao.justificativa)} ${escaparHTML(doacao.motivoDestino)}</p>` : ""}
+      </div>
+      <button class="botao-remover" type="button" data-remover-doacao="${doacao.id}" aria-label="Remover ${escaparHTML(doacao.alimento)}">&times;</button>
+    </article>
+  `;
+}
+
 function atualizarListaDoacoes() {
+  const doacoesOrdenadas = ordenarMaisRecentesPrimeiro(doacoes);
+  const pendentesOrdenadas = ordenarMaisRecentesPrimeiro(doacoes.filter((doacao) => !doacao.processada));
+
   totalItens.textContent = doacoes.length;
-  botaoProcessar.disabled = doacoes.length === 0;
+  totalPendentes.textContent = pendentesOrdenadas.length;
+  botaoProcessar.disabled = pendentesOrdenadas.length === 0;
+
+  if (pendentesOrdenadas.length === 0) {
+    listaDoacoesPendentes.innerHTML = `
+      <div class="estado-vazio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V10M18 20V4M6 20v-6M3 20h18" /></svg>
+        <h3>Nenhuma doação pendente</h3>
+        <p>Cadastre um alimento para liberar o processamento, ou acompanhe os itens já processados abaixo.</p>
+      </div>
+    `;
+  } else {
+    listaDoacoesPendentes.innerHTML = pendentesOrdenadas.map((doacao) => montarCardDoacao(doacao, { compacto: true })).join("");
+  }
 
   if (doacoes.length === 0) {
     listaDoacoes.innerHTML = `
@@ -807,42 +1409,7 @@ function atualizarListaDoacoes() {
     return;
   }
 
-  listaDoacoes.innerHTML = doacoes.map((doacao) => {
-    const prioridade = doacao.processada
-      ? `<span class="selo-prioridade ${doacao.classePrioridade}">${doacao.prioridade}</span>`
-      : `<span class="selo-prioridade">Aguardando processamento</span>`;
-
-    const destino = doacao.processada ? escaparHTML(doacao.destino) : "Será definido automaticamente";
-    const avisoDestino = doacao.destinoPadrao && doacao.processada
-      ? `<span class="aviso-destino-padrao">Sugestão padrão</span>`
-      : "";
-
-    return `
-      <article class="item-doacao">
-        <div>
-          <h3>${escaparHTML(doacao.alimento)}</h3>
-          <p>${escaparHTML(doacao.categoria)}</p>
-        </div>
-        <div>
-          <strong>${formatarNumero(doacao.quantidade)} kg</strong>
-          <span>${escaparHTML(doacao.doadorNome)}</span>
-        </div>
-        <div>
-          <strong>${formatarData(doacao.dataVencimento)}</strong>
-          <span>${formatarPrazoVencimento(doacao.diasRestantes)}</span>
-        </div>
-        <div>
-          ${prioridade}
-        </div>
-        <div class="item-doacao-destino">
-          <strong>${destino}</strong>
-          ${avisoDestino}
-          ${doacao.processada ? `<p class="item-doacao-justificativa">${escaparHTML(doacao.justificativa)} ${escaparHTML(doacao.motivoDestino)}</p>` : ""}
-        </div>
-        <button class="botao-remover" type="button" data-remover-doacao="${doacao.id}" aria-label="Remover ${escaparHTML(doacao.alimento)}">&times;</button>
-      </article>
-    `;
-  }).join("");
+  listaDoacoes.innerHTML = doacoesOrdenadas.map((doacao) => montarCardDoacao(doacao)).join("");
 
   document.querySelectorAll("[data-remover-doacao]").forEach((botao) => {
     botao.addEventListener("click", () => removerDoacao(Number(botao.dataset.removerDoacao)));
@@ -862,19 +1429,115 @@ function atualizarResultado() {
   }
 
   const contar = (prioridade) => processadas.filter((doacao) => doacao.prioridade === prioridade).length;
+  const cards = [
+    { prioridade: "Atenção", titulo: "Atenção", subtitulo: "Conferência obrigatória", quantidade: contar("Atenção") },
+    { prioridade: "Alta", titulo: "Prioridade Alta", subtitulo: "Redistribuição urgente", quantidade: contar("Alta") },
+    { prioridade: "Média", titulo: "Prioridade Média", subtitulo: "Planejamento rápido", quantidade: contar("Média") },
+    { prioridade: "Baixa", titulo: "Prioridade Baixa", subtitulo: "Fluxo regular", quantidade: contar("Baixa") }
+  ];
 
   painelResultado.innerHTML = `
     <div class="resultado-grade">
-      <article class="resultado-card"><strong>${contar("Alta")}</strong><span>Prioridade alta</span></article>
-      <article class="resultado-card"><strong>${contar("Média")}</strong><span>Prioridade média</span></article>
-      <article class="resultado-card"><strong>${contar("Baixa")}</strong><span>Prioridade baixa</span></article>
-      <article class="resultado-card"><strong>${contar("Atenção")}</strong><span>Itens em atenção</span></article>
+      ${cards.map((card) => `
+        <button class="resultado-card resultado-card-filtro" type="button" data-filtro-prioridade="${card.prioridade}" aria-label="Abrir filtro de ${card.titulo}">
+          <strong>${card.quantidade}</strong>
+          <span>${card.titulo}</span>
+          <small>${card.subtitulo}</small>
+        </button>
+      `).join("")}
     </div>
   `;
+
+  document.querySelectorAll("[data-filtro-prioridade]").forEach((botao) => {
+    botao.addEventListener("click", () => abrirModalFiltroPrioridade(botao.dataset.filtroPrioridade));
+  });
 }
 
 /* =========================================================
-   17. INDICADORES DA HOME E DO RELATÓRIO
+   17. MODAL DE FILTRO POR PRIORIDADE
+   Mostra detalhes das doações processadas sem permitir edição.
+========================================================= */
+function obterDestinoPorId(idDestino) {
+  return pontosDestino.find((destino) => destino.id === idDestino) || null;
+}
+
+function obterResumoLocalidadeDoador(doacao) {
+  const doador = doadores.find((item) => item.id === doacao.doadorId);
+
+  if (!doador) return "Localidade do doador não informada";
+  return `${doador.cidade} · ${doador.bairro}`;
+}
+
+function montarItemFiltroPrioridade(doacao) {
+  const destino = obterDestinoPorId(doacao.destinoId);
+  const localDestino = destino ? `${destino.cidade} · ${destino.bairro}` : "Localidade de destino não informada";
+  const observacao = doacao.prioridade === "Atenção"
+    ? "Item exige conferência obrigatória e não deve ser destinado diretamente para consumo."
+    : doacao.motivoDestino;
+
+  return `
+    <article class="item-filtro-prioridade">
+      <div class="item-filtro-topo">
+        <div>
+          <strong>${escaparHTML(doacao.alimento)}</strong>
+          <span>${escaparHTML(doacao.categoria)} · ${formatarNumero(doacao.quantidade)} kg</span>
+        </div>
+        <span class="selo-prioridade ${doacao.classePrioridade}">${doacao.prioridade}</span>
+      </div>
+      <dl>
+        <div><dt>Validade</dt><dd>${formatarData(doacao.dataVencimento)} · ${formatarPrazoVencimento(doacao.diasRestantes)}</dd></div>
+        <div><dt>Doador</dt><dd>${escaparHTML(doacao.doadorNome)} · ${escaparHTML(obterResumoLocalidadeDoador(doacao))}</dd></div>
+        <div><dt>Destino</dt><dd>${escaparHTML(doacao.destino || "Destino ainda não definido")} · ${escaparHTML(localDestino)}</dd></div>
+        <div><dt>Observação</dt><dd>${escaparHTML(observacao)}</dd></div>
+      </dl>
+    </article>
+  `;
+}
+
+function abrirModalFiltroPrioridade(prioridade) {
+  if (!modalFiltro) return;
+
+  const itens = ordenarMaisRecentesPrimeiro(obterDoacoesProcessadas().filter((doacao) => doacao.prioridade === prioridade));
+  const titulos = {
+    Atenção: "Atenção / Conferência obrigatória",
+    Alta: "Doações de prioridade alta",
+    Média: "Doações de prioridade média",
+    Baixa: "Doações de prioridade baixa"
+  };
+
+  tituloFiltroPrioridade.textContent = titulos[prioridade] || "Doações filtradas";
+  contagemFiltroPrioridade.textContent = `${itens.length} ${itens.length === 1 ? "item encontrado" : "itens encontrados"}`;
+
+  listaFiltroPrioridade.innerHTML = itens.length
+    ? itens.map(montarItemFiltroPrioridade).join("")
+    : `
+      <div class="estado-vazio">
+        <h3>Nenhuma doação encontrada para este filtro.</h3>
+        <p>Processe a redistribuição ou escolha outra prioridade.</p>
+      </div>
+    `;
+
+  modalFiltro.hidden = false;
+  botaoFecharModalFiltro.focus();
+}
+
+function fecharModalFiltroPrioridade() {
+  if (!modalFiltro) return;
+  modalFiltro.hidden = true;
+}
+
+if (botaoFecharModalFiltro) {
+  botaoFecharModalFiltro.addEventListener("click", fecharModalFiltroPrioridade);
+}
+
+if (modalFiltro) {
+  modalFiltro.addEventListener("click", (evento) => {
+    if (evento.target === modalFiltro) fecharModalFiltroPrioridade();
+  });
+}
+
+/* =========================================================
+   18. INDICADORES DA HOME E DO RELATÓRIO
    Os números são calculados com os arrays da sessão atual.
 ========================================================= */
 function calcularIndicadoresAtuais() {
@@ -922,7 +1585,7 @@ function atualizarIndicadores() {
 /* =========================================================
    18. GRÁFICOS DO DASHBOARD
    Os gráficos usam somente HTML, CSS e JavaScript:
-   - a rosca recebe um conic-gradient calculado;
+   - as prioridades usam barras horizontais calculadas em porcentagem;
    - as barras recebem largura ou altura proporcional ao maior valor;
    - o painel de localidades usa cidades e bairros sem repetição.
 ========================================================= */
@@ -930,44 +1593,42 @@ function atualizarIndicadores() {
 /* Conta quantas ocorrências existem para cada valor de uma propriedade. */
 function contarPorPropriedade(lista, propriedade) {
   return lista.reduce((contagem, item) => {
-    const chave = item[propriedade] || "Não informado";
+    const valor = item[propriedade] || "Não informado";
+    const chave = propriedade === "tipo" ? normalizarTipoDoador(valor) : valor;
     contagem[chave] = (contagem[chave] || 0) + 1;
     return contagem;
   }, {});
 }
 
-/* Atualiza a rosca e a legenda das quatro prioridades possíveis. */
+/* Atualiza a visualização de prioridades em barras horizontais legíveis. */
 function atualizarGraficoPrioridades() {
   const processadas = obterDoacoesProcessadas();
   const prioridades = [
-    { nome: "Alta", cor: "#d75442" },
-    { nome: "Média", cor: "#e5b53e" },
-    { nome: "Baixa", cor: "#70ad45" },
-    { nome: "Atenção", cor: "#9f3f35" }
+    { nome: "Atenção", cor: "#9f3f35", texto: "Conferência" },
+    { nome: "Alta", cor: "#d75442", texto: "Urgente" },
+    { nome: "Média", cor: "#e5b53e", texto: "Planejada" },
+    { nome: "Baixa", cor: "#70ad45", texto: "Regular" }
   ];
   const total = processadas.length;
-  let inicio = 0;
 
-  const fatias = prioridades.map((item) => {
+  const linhas = prioridades.map((item) => {
     const quantidade = processadas.filter((doacao) => doacao.prioridade === item.nome).length;
-    const tamanho = total ? quantidade / total * 100 : 0;
-    const fatia = `${item.cor} ${inicio}% ${inicio + tamanho}%`;
+    const porcentagem = total ? Math.round(quantidade / total * 100) : 0;
 
-    inicio += tamanho;
-    return { ...item, quantidade, fatia };
+    return { ...item, quantidade, porcentagem };
   });
 
-  graficoPrioridades.style.background = total
-    ? `conic-gradient(${fatias.map((item) => item.fatia).join(", ")})`
-    : "conic-gradient(#e3ece0 0 100%)";
-
   totalPrioridades.textContent = total;
-  legendaPrioridades.innerHTML = fatias.map((item) => `
-    <div>
-      <i style="--cor-legenda: ${item.cor}"></i>
-      <span>${item.nome}</span>
-      <strong>${item.quantidade}</strong>
-    </div>
+  graficoPrioridades.classList.toggle("prioridades-resumo-vazio", total === 0);
+  legendaPrioridades.innerHTML = linhas.map((item) => `
+    <article class="prioridade-barra-item" style="--cor-prioridade: ${item.cor}; --largura-prioridade: ${Math.max(4, item.porcentagem)}%">
+      <div>
+        <span>${item.nome}</span>
+        <small>${item.texto}</small>
+        <strong>${item.quantidade} item${item.quantidade === 1 ? "" : "s"} · ${item.porcentagem}%</strong>
+      </div>
+      <i><b></b></i>
+    </article>
   `).join("");
 }
 
@@ -1019,10 +1680,104 @@ function atualizarPainelLocalidades() {
   totalBairros.textContent = bairros.length;
   listaCidades.textContent = cidades.length ? cidades.join(", ") : "Nenhuma cidade cadastrada.";
   listaBairros.textContent = bairros.length ? bairros.join(", ") : "Nenhum bairro ou vila cadastrado.";
+
+  atualizarLocalidadesDetalhadas();
+}
+
+/* Monta a leitura detalhada de cidades, bairros e parceiros da rede. */
+function atualizarLocalidadesDetalhadas() {
+  if (!listaLocalidadesDetalhadas) return;
+
+  const mapaCidades = new Map();
+  const registrarParceiro = (registro, papel) => {
+    const cidade = registro.cidade || "Cidade não informada";
+    const bairro = registro.bairro || "Bairro não informado";
+    const chaveCidade = normalizarChaveTexto(cidade);
+
+    if (!mapaCidades.has(chaveCidade)) {
+      mapaCidades.set(chaveCidade, {
+        cidade,
+        doadores: 0,
+        destinos: 0,
+        bairros: new Map(),
+        parceiros: []
+      });
+    }
+
+    const grupoCidade = mapaCidades.get(chaveCidade);
+    const chaveBairro = normalizarChaveTexto(bairro);
+
+    if (!grupoCidade.bairros.has(chaveBairro)) {
+      grupoCidade.bairros.set(chaveBairro, { bairro, doadores: 0, destinos: 0 });
+    }
+
+    const grupoBairro = grupoCidade.bairros.get(chaveBairro);
+
+    if (papel === "Doador") {
+      grupoCidade.doadores++;
+      grupoBairro.doadores++;
+    } else {
+      grupoCidade.destinos++;
+      grupoBairro.destinos++;
+    }
+
+    grupoCidade.parceiros.push({
+      nome: registro.nome,
+      tipo: registro.tipo,
+      papel,
+      bairro
+    });
+  };
+
+  doadores.forEach((doador) => registrarParceiro(doador, "Doador"));
+  pontosDestino.forEach((destino) => registrarParceiro(destino, "Destino"));
+
+  const cidadesDetalhadas = [...mapaCidades.values()].sort((cidadeA, cidadeB) => cidadeA.cidade.localeCompare(cidadeB.cidade, "pt-BR"));
+
+  if (cidadesDetalhadas.length === 0) {
+    listaLocalidadesDetalhadas.innerHTML = `
+      <div class="estado-vazio">
+        <h3>Nenhuma localidade detalhada</h3>
+        <p>Cadastre doadores e pontos de destino para visualizar cidades, bairros e parceiros.</p>
+      </div>
+    `;
+    return;
+  }
+
+  listaLocalidadesDetalhadas.innerHTML = cidadesDetalhadas.map((cidade) => {
+    const bairrosCidade = [...cidade.bairros.values()].sort((bairroA, bairroB) => bairroA.bairro.localeCompare(bairroB.bairro, "pt-BR"));
+    const parceirosCidade = cidade.parceiros.sort((parceiroA, parceiroB) => parceiroA.nome.localeCompare(parceiroB.nome, "pt-BR"));
+
+    return `
+      <article class="localidade-card">
+        <header>
+          <div>
+            <span>Cidade</span>
+            <h3>${escaparHTML(cidade.cidade)}</h3>
+          </div>
+          <p>${cidade.doadores} doador${cidade.doadores === 1 ? "" : "es"} · ${cidade.destinos} destino${cidade.destinos === 1 ? "" : "s"}</p>
+        </header>
+        <div class="localidade-bairros">
+          ${bairrosCidade.map((bairro) => `
+            <span>${escaparHTML(bairro.bairro)}: ${bairro.doadores} doador${bairro.doadores === 1 ? "" : "es"}, ${bairro.destinos} destino${bairro.destinos === 1 ? "" : "s"}</span>
+          `).join("")}
+        </div>
+        <div class="localidade-parceiros">
+          ${parceirosCidade.map((parceiro) => `
+            <p><strong>${escaparHTML(parceiro.nome)}</strong> — ${escaparHTML(parceiro.papel)} / ${escaparHTML(parceiro.tipo)} — ${escaparHTML(parceiro.bairro)}</p>
+          `).join("")}
+        </div>
+      </article>
+    `;
+  }).join("");
 }
 
 /* Sincroniza todos os elementos visuais do dashboard em uma única chamada. */
 function atualizarDashboard() {
+  if (relatorioVazio) {
+    relatorioVazio.hidden = obterDoacoesProcessadas().length > 0;
+  }
+
   atualizarGraficoPrioridades();
   atualizarGraficoCategorias();
   atualizarGraficoTiposDoadores();
@@ -1035,7 +1790,7 @@ function atualizarDashboard() {
    registrados para conferência e transparência.
 ========================================================= */
 function atualizarHistorico() {
-  const processadas = obterDoacoesProcessadas();
+  const processadas = ordenarMaisRecentesPrimeiro(obterDoacoesProcessadas());
 
   if (processadas.length === 0) {
     historico.innerHTML = `
@@ -1078,6 +1833,7 @@ function atualizarHistorico() {
    Uma única função sincroniza listas, cards e relatório.
 ========================================================= */
 function atualizarInterfaceCompleta() {
+  atualizarDatalists();
   atualizarListaDoadores();
   atualizarListaDestinos();
   atualizarAvisoDoador();
@@ -1096,6 +1852,7 @@ document.querySelector("[data-ano-atual]").textContent = new Date().getFullYear(
 const abaInicial = window.location.hash.replace("#", "");
 const abasDisponiveis = ["inicio", "doadores", "destinos", "doacao", "relatorio"];
 
+atualizarEstadoVisualDemonstracao();
 atualizarInterfaceCompleta();
 
 if (abasDisponiveis.includes(abaInicial)) {

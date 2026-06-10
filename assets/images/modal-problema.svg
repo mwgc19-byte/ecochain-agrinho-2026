@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Caixas de alimentos com relógio de validade</title>
+  <desc id="desc">Ilustração vetorial sobre desperdício, tempo e controle de validade.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f4faef"/>
+      <stop offset="1" stop-color="#d8ecd1"/>
+    </linearGradient>
+    <linearGradient id="verde" x1="0" x2="1" y1="1" y2="0">
+      <stop offset="0" stop-color="#00602a"/>
+      <stop offset="1" stop-color="#8bd12b"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="520" rx="34" fill="url(#bg)"/>
+  <path d="M600 42c63 59 88 136 61 212-25 72-94 110-173 100-77-10-139-66-151-143C324 128 378 54 463 29c43-13 75-8 137 13Z" fill="#8bd12b" opacity=".18"/>
+  <path d="M104 352h330l53 86H71l33-86Z" fill="#003e1b" opacity=".12"/>
+  <g transform="translate(95 170)">
+    <path d="M0 64 142 0l147 64v164L142 289 0 228Z" fill="#ecd9a6"/>
+    <path d="m142 0 147 64-147 61L0 64Z" fill="#f4e8c7"/>
+    <path d="M142 125v164" stroke="#b7893f" stroke-width="7" opacity=".55"/>
+    <path d="M0 64v164l142 61V125Z" fill="#d9b879"/>
+    <path d="m289 64-147 61v164l147-61Z" fill="#cda965"/>
+    <path d="M86 26 231 91" stroke="#b7893f" stroke-width="8" opacity=".4"/>
+  </g>
+  <g transform="translate(430 124)">
+    <circle cx="103" cy="103" r="103" fill="#fff" stroke="#cbdcc5" stroke-width="5"/>
+    <circle cx="103" cy="103" r="76" fill="#f7fbf4"/>
+    <path d="M103 44v63l43 24" fill="none" stroke="#006c2b" stroke-linecap="round" stroke-width="13"/>
+    <path d="M103 18v26M103 206v-26M18 103h26M206 103h-26" stroke="#8bd12b" stroke-linecap="round" stroke-width="9"/>
+    <path d="M154 46c28 22 42 58 34 96" fill="none" stroke="#e0a932" stroke-linecap="round" stroke-width="9"/>
+  </g>
+  <g transform="translate(173 204)">
+    <circle cx="43" cy="43" r="39" fill="#f7f0d6"/>
+    <path d="M43 18c17 13 23 31 14 52-20-7-30-22-28-45 5 5 10 9 14 13Z" fill="url(#verde)"/>
+    <path d="M34 62c13-21 24-35 39-49" stroke="#0c4d25" stroke-linecap="round" stroke-width="4" opacity=".8"/>
+  </g>
+  <path d="M566 302c33 26 55 64 59 107" fill="none" stroke="#00602a" stroke-width="8" stroke-linecap="round" stroke-dasharray="4 18" opacity=".45"/>
+</svg>
